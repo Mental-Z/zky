@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>仲康工作站登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/aui.css">
+    <style>
+        html,body {background-color: #00b096;}
+        /*html{
+          background-image: url();
+        }*/
+        .login_form{
+          /*background: #fff;*/
+          background: #00b096;
+          /*border:1px solid #f5f5f5;*/
+          /*box-shadow: 1px 1px;*/
+          margin:20% 0px;padding: 0 10px}
+        .login_form h1,h2{text-align: center;
+          /*color:#00B096;*/
+          color:#fff;
+          /*background: #fff;*/
+          background-color: #00b096;
+        }
+        ul.aui-list{background: #00b096!important;}
+        ul.aui-list li{background: #00b096!important;}
+
+        #login{width:100%;background-color:#4cd0bc!important;margin: 0 auto;color: #fff;border-radius: 25px;border:1px solid #000;}
+        input#username,#password{border:1px solid #000!important;margin-top: 5px!important;text-indent:10px;border-radius: 20px;background-color: #fff;}
+        #rem_pw{visibility: hidden;position: absolute;}
+        #rem_pw + label{width: 15px;height: 15px;background-color: #fff;border:1px solid #000;}
+        #rem_pw:checked+label{background-color: #00B096}
+        #rem_pw:checked+label:before{content:"\2714";font-size: 10px;color:#fff;position: absolute;left: 0.7%;top:20%;}
+    </style>
+</head>
+
+<body>
+    <div class="login_form">
+      <h1>仲康工作站</h1>
+      <h2>登录</h2>
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <!-- <div class="aui-list-item-label">
+                    用户名
+                </div> -->
+                    <div class="aui-list-item-input">
+                        <input type="text" placeholder="用户名" id="username">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <!-- <div class="aui-list-item-label">
+                    密码
+                </div> -->
+                    <div class="aui-list-item-input">
+                        <input type="password" placeholder="密码" id="password">
+                    </div>
+                </div>
+            </li>
+            <!-- <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-input">
+                        <input type="checkbox" value="记住密码" checked id="rem_pw">
+                        <label for="rem_pw"></label>
+                        记住密码
+                    </div>
+                </div>
+            </li> -->
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div class="aui-btn aui-btn-block" id="login" tapmode onclick="toLogin()">登录</div>
+                    <!-- <div class="aui-btn aui-btn-danger aui-margin-l-5">取消</div> -->
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js">
+</script>
+<script type="text/javascript">
+    apiready = function() {
+        // var personalInfo = $api.getStorage('personalInfo');
+        // alert(personalInfo)  //undefined
+        // if(personalInfo=="undefined"){
+        //   api.openWin({
+        //       name: 'index',
+        //       url: '../index.html',
+        //       pageParam: {
+        //           name: 'test'
+        //       }
+        //   });
+        // }else{
+        //
+        // }
+
+
+        var ci = 0;
+        var time1, time2;
+        api.addEventListener({
+        name : 'keyback'
+        }, function(ret, err) {
+        if (ci == 0) {
+        time1 = new Date().getTime();
+        ci = 1;
+
+         api.toast({msg:'再按一次返回键退出'});
+
+        } else if (ci == 1) {
+        time2 = new Date().getTime();
+        if (time2 - time1 < 3000) {
+        api.closeWidget({
+        id : api.appId,
+        retData : {
+        name : 'closeWidget'
+        },
+        silent : true
+        });
+        } else {
+        ci = 0;
+         api.toast({msg:'再按一次返回键退出'});
+        }
+        }
+        });
+
+
+
+
+    };
+
+    function toLogin() {
+        var login_name = $api.val($api.byId('username'));
+        var password = $api.val($api.byId('password'));
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/sessions',
+            method: 'post',
+            dataType: "json",
+            data: {
+                values: {
+                    "login_name": login_name,
+                    "password": password
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                $api.setStorage('personalInfo', ret);
+
+                api.openWin({
+                    name: 'index',
+                    url: '../index.html',
+                    reload:true
+                });
+
+            } else {
+                alert("用户名或密码错误");
+            }
+        });
+
+    }
+</script>
+
+</html>

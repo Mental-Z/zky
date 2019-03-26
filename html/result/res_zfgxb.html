@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+  <html onclick="closeRes()">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+      <style>
+          html,body{background-color: rgba(0, 0, 0, 0.1);}
+          .form {
+              background-color: #fff;
+              margin-top: 22%;
+          }
+          .title {
+              /*background-color: #00B096;*/
+              position: relative;
+              height: 50px;
+              border-bottom: 1px solid #f1f1f1;
+          }
+          h2 {
+              text-align: center;
+              left: auto;
+              color: #000;
+              line-height: 50px;
+              font-weight: 500;
+              font-size: 20px;
+          }
+          .content {
+            margin: 10px 0;
+              padding-left: 15px;
+              padding-right: 15px;
+              text-align: center;
+          }
+          .qr {
+              display: -webkit-box;
+              display: -webkit-flex;
+              display: flex;
+              width: 100%;
+              position: relative;
+              height: 60px;
+              -webkit-blox-orient: horizontal;
+              -webkit-flex-flow: row;
+              flex-flow: row;
+          }
+
+          .qr span {
+              -webkit-box-flex: 1;
+              -webkit-flex: 1;
+              flex: 1;
+              line-height: 60px;
+              width: 100%;
+              height: 60px;
+              text-align: center;
+              border:1px solid #f2f2f2;
+              border-bottom: 0;
+          }
+          #sure{color:#00B096;}
+          .circle{border:1px solid gray;border-radius: 50%;width:14px;height: 14px;}
+          .content>div>span{margin-left: 15px;}
+          .sel{border:1px solid #00B096;}
+          .sel:after{background-color: #00B096;content:'';width: 12px;height:12px;display: block;border-radius: 50%;position: relative;top:1px;left: 1px;}
+          .content>div{margin-top:10px;height:40px;line-height: 40px;}
+          input{border-bottom:1px solid #f2f2f2;padding-left: 10px;width:80px;}
+          input:focus{outline-offset: 0;border-bottom:1px solid #00B096;outline: none;padding-left:10px}
+      </style>
+  </head>
+  <body>
+    <div class="form" onclick="stopEvent()">
+        <div class="title">
+            <!-- <span class="close" onclick="closeEdit()">X</span> -->
+            <h2 id="title"></h2>
+            <!-- <span class="save" onclick="saveEdit()">保存</span> -->
+        </div>
+        <div class="content">
+            <div class="is_zaofgxb">
+              <span id="is_zaofgxb_1" tapmode onclick="change(this)"><span id="y" class="circle"></span>是</span>
+              <span id="is_zaofgxb_0" tapmode onclick="change(this)"><span id="n" class="circle"></span>否</span>
+              <input type="hidden" name="is_zaofgxb" id="is_zaofgxb" value="">
+            </div>
+            <!-- <div class="jig_value">
+              肌酐值：<input type="text" name="jig_value" id="jig_value" value="">umol/L
+            </div>
+            <div class="jigqc_rate">
+              肌酐清除率：<input type="text" name="jigqc_rate" id="jigqc_rate" value="" disabled="true">
+            </div> -->
+            <!-- <div class="stopxy_year">
+              戒烟：<input type="text" name="stopxy_year" id="stopxy_year" value="">年
+            </div> -->
+        </div>
+        <div class="qr">
+            <span id='sure' tapmode onclick="Sure()">确定</span>
+            <span id='cancle' tapmode onclick="closeRes()">取消</span>
+        </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../../script/api.js"></script>
+  <script type="text/javascript">
+  apiready = function() {
+      personalInfo = $api.getStorage('personalInfo');
+      var token = personalInfo.result.token;
+
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_jwbs/detail/zaofgxb',
+          method: 'post',
+          headers:{
+            'Authorization':token
+          },
+          data: {  }
+      },function(ret, err){
+          if (ret) {
+              $api.text($api.byId("title"), ret.result.title);
+              if(ret.result.is_zaofgxb == 1){
+                $api.addCls($api.byId("y"), 'sel');
+                $api.val($api.byId("is_zaofgxb"), '1');
+              }else{
+                $api.addCls($api.byId("n"), 'sel');
+                $api.val($api.byId("is_zaofgxb"), '0');
+              }
+              // $api.val($api.byId("jig_value"),ret.result.jig_value);
+              // $api.val($api.byId("jigqc_rate"),ret.result.jigqc_rate);
+
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+
+  }
+
+  function closeRes() {
+      api.closeFrame();
+  }
+
+  function stopEvent() {
+      event.preventDefault();
+      event.stopPropagation();
+  }
+
+  function change(tag) {
+      if(tag == $api.dom('#is_zaofgxb_1') ){
+        $api.addCls($api.byId("y"), 'sel');
+        $api.removeCls($api.byId("n"), 'sel');
+        $api.val($api.byId("is_zaofgxb"), '1');
+
+      }else {
+        $api.addCls($api.byId("n"), 'sel');
+        $api.removeCls($api.byId("y"), 'sel');
+        $api.val($api.byId("is_zaofgxb"), '0');
+
+      }
+  }
+
+  function Sure() {
+      var token = personalInfo.result.token;
+
+      var result = $api.val($api.byId("is_zaofgxb"));
+      // var jig_value = $api.val($api.byId("jig_value"));
+      // var jigqc_rate = $api.val($api.byId("jigqc_rate"));
+
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/edit/patient_jwbs/zaofgxb',
+          method: 'post',
+          headers:{
+            'Authorization':token
+          },
+          data: {
+              values: {
+                  result: result,
+                  // jigqc_rate:jigqc_rate
+
+              }
+          }
+      },function(ret, err){
+          if (ret) {
+            var jsFun = "showList()";
+            api.execScript({
+
+                frameName: 'frame1',
+                script: jsFun
+            });
+            closeRes();
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+  }
+  </script>
+  </html>

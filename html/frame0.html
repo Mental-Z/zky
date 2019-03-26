@@ -1,0 +1,2599 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>检测结果</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/aui.css">
+    <style>
+        .empty {
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        nav {
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view_active {
+            display: block;
+        }
+
+        .aui-list .aui-list-item {
+            margin-top: 20px;
+        }
+
+        .label {
+            font-size: 18px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 5px;
+            background-color: #00B096;
+            color: #fff;
+            text-align: center;
+            line-height: 43px;
+        }
+
+        .label.four {
+            line-height: 21px;
+            font-size: 18px;
+        }
+
+        span img {
+            width: 31px!important;
+        }
+
+        .img_span {
+          margin-right: 10px;
+          width:31px;
+            /*margin-right: 20px;*/
+        }
+
+        .aui-list-item-text {
+            height: 35px;
+        }
+
+        .aui-list-item-text.middle_div {
+            height: 10px;
+        }
+
+        .value {
+            /*margin-right: 5px;*/
+            color: #00B096;
+            width: 55px;
+        }
+
+        #bmr{width:auto;}
+        #xt_is_meal {
+            border: 1px solid #00b096;
+            color: #00B096;
+            border-radius: 15px;
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+        #getXdt,#checkXdt{
+          background-color: #00B096;
+          color:#fff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <nav id="nav">
+        <div class="aui-bar aui-bar-btn aui-bar-btn-round" style="width:45%;">
+            <div class="aui-bar-btn-item aui-active" id="list_view" tapmode onclick="openListview()">列表视图</div>
+            <div class="aui-bar-btn-item" id="order_view" tapmode onclick="openOrderview()">统计视图</div>
+        </div>
+    </nav> -->
+    <div class="aui-card-list">
+        <div class="aui-card-list-content">
+            <ul class="aui-list aui-media-list" style="background:#f5f5f5;">
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xy')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">血压</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xy_height' class="value"></span>收缩压</div>
+                                <div class="aui-list-item-right"><span id="xy_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xy_low' class="value"></span>舒张压</div>
+                                <div class="aui-list-item-right">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xy')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xy')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xt')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">血糖</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="xt_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14">
+                                    <span id="xt_value" class="value"></span>
+                                    <span id="xt_is_meal" class=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xt')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xt')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xz')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">血脂</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xz_tc' class="value"></span>TC</div>
+                                <div class="aui-list-item-right"><span id="xz_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xz_tg' class="value"></span>TG</div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xz_hdlc' class="value"></span>hdl_c</div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xz')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xz')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">
+                                    <span id='xz_ldlc' class="value"></span> LDL_C
+                                    <span class="value" style="width:110px">目标值<<span id="xz_target"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xn')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">血凝</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xn_aptt' class="value"></span>APTT</div>
+                                <div class="aui-list-item-right"><span id="xn_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xn_pt' class="value"></span>PT</div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xn_fib' class="value"></span>FIB</div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xn')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xn')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xn_tt' class="value"></span>TT</div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='xn_inr' class="value"></span>INR</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xyang')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">血氧</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="xyang_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="xyang_value"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xyang')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xyang')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('xl')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">心率</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="xl_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="xl_value" class="value"></span>bpm</div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xl')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xl')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">心电图</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="xdt_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14">
+                                  <span id="xdt_value" class="value"></span>
+                                  <button id="getXdt" type="button" name="button" onclick="">采集</button>
+                                  <button id="checkXdt" type="button" name="button" onclick="lkXdt()">查看</button>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <!-- <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('xdt')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('xdt')"><img src="../image/edit.png" alt=""></span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('uacr')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label" style="font-size:15px;">UACR</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="uacr_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="uacr_value"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('uacr')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('uacr')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('ns')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">尿酸</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="ns_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="ns_value"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('ns')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('ns')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('nbdb')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">尿白蛋白</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="nbdb_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="nbdb_value"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('nbdb')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('nbdb')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('njg')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">尿肌酐</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="njg_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14"><span id="njg_value"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('njg')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('njg')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle" tapmode onclick="openView('nbxb')">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">尿白细胞</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right"><span id="nbxb_time"></span></div>
+                            </div>
+                            <div class="aui-list-item-text middle_div">
+                                <div class="aui-list-item-title aui-font-size-14">
+                                    <span id="nbxb_value" class="value"></span>
+                                    <span id="is_positive" class="value" style="width:20px;"></span>
+                                    <span id="is_positive_value" style="color:#00B096;"></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="deleteDetail('nbxb')"><img src="../image/delete.png" alt=""></span>
+                                    <span class="img_span" tapmode onclick="editDetail('nbxb')"><img src="../image/edit.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+<!-- _____________________________________________________________________________________________________________________________________________ -->
+
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">体重</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体重<span id='weight' class="value"></span><span id="unit_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time1"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体重正常范围上限<span id='sw_max' class="value"></span><span id="unit_sw_max"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体重正常范围下限<span id='sw_min' class="value"></span><span id="unit_sw_min"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tizhong')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体重控制量<span id='weight_control' class="value"></span><span id="unit_weight_control"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">体脂率</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体脂率<span id='fat_percentage' class="value"></span><span id="unit_fat_percentage"></span></div>
+                                <div class="aui-list-item-right"><span id="time2"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体脂百分比正常范围上限<span id='fat_percentage_max' class="value"></span><span id="unit_fat_percentage_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tizhi')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体脂百分比正常范围下限<span id='fat_percentage_min' class="value"></span><span id="unit_fat_percentage_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">脂肪量</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">脂肪量<span id='fat_weight' class="value"></span><span id="unit_fat_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time3"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">脂肪正常范围上限<span id='fat_weight_max' class="value"></span><span id="unit_fat_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('zhifang')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">脂肪正常范围下限<span id='fat_weight_min' class="value"></span><span id="unit_fat_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">肌肉量</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">肌肉量<span id='muscle_weight' class="value"></span><span id="unit_muscle_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time4"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">肌肉正常范围上限<span id='muscle_weight_max' class="value"></span><span id="unit_muscle_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('jirou')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">肌肉正常范围下限<span id='muscle_weight_min' class="value"></span><span id="unit_muscle_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">骨骼肌</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨骼肌<span id='bone_muscle_weight' class="value"></span><span id="unit_bone_muscle_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time5"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨骼肌正常范围上限<span id='bone_muscle_weight_max' class="value"></span><span id="unit_bone_muscle_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('gugeji')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨骼肌正常范围下限<span id='bone_muscle_weight_min' class="value"></span><span id="unit_bone_muscle_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">水分</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">水分<span id='water_weight' class="value"></span><span id="unit_water_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time6"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">细胞总水正常范围上限<span id='water_weight_max' class="value"></span><span id="unit_water_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('shuifen')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">细胞总水正常范围下限<span id='water_weight_min' class="value"></span><span id="unit_water_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">蛋白质</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">蛋白质<span id='protein_weight' class="value"></span><span id="unit_protein_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time7"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">蛋白质正常范围上限<span id='protein_weight_max' class="value"></span><span id="unit_protein_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('danbaizhi')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">蛋白质正常范围下限<span id='protein_weight_min' class="value"></span><span id="unit_protein_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">体质指数</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体质指数<span id='bmi' class="value"></span><span id="unit_bmi"></span></div>
+                                <div class="aui-list-item-right"><span id="time8"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体质指数正常范围上限<span id='bmi_max' class="value"></span><span id="unit_bmi_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tizhizhishu')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体质指数正常范围下限<span id='bmi_min' class="value"></span><span id="unit_bmi_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">骨质</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨质<span id='bone_weight' class="value"></span><span id="unit_bone_weight"></span></div>
+                                <div class="aui-list-item-right"><span id="time9"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨质正常范围上限<span id='bone_weight_max' class="value"></span><span id="unit_bone_weight_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('guzhi')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">骨质正常范围下限<span id='bone_weight_min' class="value"></span><span id="unit_bone_weight_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">内脏脂肪</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">内脏脂肪<span id='visceral_fat_percentage' class="value"></span><span id="unit_visceral_fat_percentage"></span></div>
+                                <div class="aui-list-item-right"><span id="time10"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">内脏脂肪上限<span id='visceral_fat_percentage_max' class="value"></span><span id="unit_visceral_fat_percentage_max"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('neizang')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">内脏脂肪下限<span id='visceral_fat_percentage_min' class="value"></span><span id="unit_visceral_fat_percentage_min"></span></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">肥胖等级</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='' class="value"></span></div>
+                                <div class="aui-list-item-right"><span id="time11"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">肥胖等级<span id='fat_level' class="value"></span><span id="unit_fat_level"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='visceral_fat_percentage_min' class="value"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('feipang')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label">体型</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='' class="value"></span></div>
+                                <div class="aui-list-item-right"><span id="time12"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">体型<span id='physique' class="value"></span><span id="unit_physique"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <!-- <div class="aui-list-item-title aui-font-size-14">内脏脂肪下限<span id='visceral_fat_percentage_min' class="value"></span></div> -->
+                                <!-- <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tz')"><img src="../image/word01.png" alt=""></span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">基础代谢</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='' class="value"></span></div>
+                                <div class="aui-list-item-right"><span id="time13"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">基础代谢率<span id='bmr' class="value"></span><span id="unit_bmr"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='' class="value"></span></div>
+                                <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('daixie')"><img src="../image/word01.png" alt=""></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">身体状态</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='' class="value"></span></div>
+                                <div class="aui-list-item-right"><span id="time14"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">身体状态指数<span id='score' class="value"></span><span id="unit_score"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <!-- <div class="aui-list-item-title aui-font-size-14">内脏脂肪下限<span id='visceral_fat_percentage_min' class="value"></span></div> -->
+                                <!-- <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tz')"><img src="../image/word01.png" alt=""></span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 3rem;">
+                            <span class="aui-img-round">
+                                  <span class="label four">身体年龄</span>
+                            </span>
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14"><span id='visceral_fat_percentage' class="value"></span></div>
+                                <div class="aui-list-item-right"><span id="time15"></span></div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14">身体年龄<span id='body_age' class="value"></span><span id="unit_body_age"></span></div>
+
+                            </div>
+                            <div class="aui-list-item-text">
+                                <!-- <div class="aui-list-item-title aui-font-size-14">内脏脂肪下限<span id='visceral_fat_percentage_min' class="value"></span></div> -->
+                                <!-- <div class="aui-list-item-right img_div">
+                                    <span class="img_span" tapmode onclick="word('tz')"><img src="../image/word01.png" alt=""></span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <input type="hidden" name="" id="weight_word" value="">
+    <input type="hidden" name="" id="muscle_weight_word" value="">
+    <input type="hidden" name="" id="protein_weight_word" value="">
+    <input type="hidden" name="" id="bone_weight_word" value="">
+    <input type="hidden" name="" id="water_weight_word" value="">
+    <input type="hidden" name="" id="fat_weight_word" value="">
+    <input type="hidden" name="" id="fat_percentage_word" value="">
+    <input type="hidden" name="" id="bmr_word" value="">
+    <input type="hidden" name="" id="visceral_fat_percentage_word" value="">
+    <input type="hidden" name="" id="bmi_word" value="">
+    <input type="hidden" name="" id="bone_muscle_weight_word" value="">
+    <input type="hidden" name="" id="fat_level_word" value="">
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-tab.js"></script>
+<script type="text/javascript">
+ personalInfo = $api.getStorage('personalInfo');
+ patientDetails = $api.getStorage('patientDetails'); //患者详情列表信息
+ patientBodyDetails = $api.getStorage('patientBodyDetails'); //患者体脂详情
+
+    apiready = function() {
+
+        if (personalInfo != undefined) {
+
+            if (patientDetails != undefined && patientDetails != "" && patientDetails != null &&
+                  patientBodyDetails != undefined && patientBodyDetails != "" && patientBodyDetails != null) {
+
+                putStorInfo(patientDetails);
+
+                putBodyInfo(patientBodyDetails);
+
+                getPatInfo();
+
+                getBodyInfo();
+
+
+            } else {
+                getPatInfo();
+
+                getBodyInfo();
+            }
+        }
+    }
+
+    function getBodyInfo() {
+      var token = personalInfo.result.token;
+
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BodyFat',
+          method: 'post',
+          headers: {
+              'Authorization': token
+          },
+          data: {}
+      }, function(ret, err) {
+          $api.setStorage('patientBodyDetails', ret);
+
+          putBodyInfo(ret)
+      });
+    }
+
+    function getPatInfo() {
+      var token = personalInfo.result.token;
+
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/list',
+          method: 'post',
+          headers: {
+              'Authorization': token
+          },
+          data: {}
+      }, function(ret, err) {
+          $api.setStorage('patientDetails', ret);
+
+          putStorInfo(ret)
+      });
+    }
+
+    function putBodyInfo(ret) {
+
+      $api.text($api.byId("time1"), ret.result.time);
+      $api.text($api.byId("time2"), ret.result.time);
+      $api.text($api.byId("time3"), ret.result.time);
+      $api.text($api.byId("time4"), ret.result.time);
+      $api.text($api.byId("time5"), ret.result.time);
+      $api.text($api.byId("time6"), ret.result.time);
+      $api.text($api.byId("time7"), ret.result.time);
+      $api.text($api.byId("time8"), ret.result.time);
+      $api.text($api.byId("time9"), ret.result.time);
+      $api.text($api.byId("time10"), ret.result.time);
+      $api.text($api.byId("time11"), ret.result.time);
+      $api.text($api.byId("time12"), ret.result.time);
+      $api.text($api.byId("time13"), ret.result.time);
+      $api.text($api.byId("time14"), ret.result.time);
+      $api.text($api.byId("time15"), ret.result.time);
+
+
+      $api.text($api.byId("weight"), ret.result.weight);
+      if(ret.result.weight_red == true){
+        $api.css($api.byId("weight"), "color:red")
+      }
+      $api.text($api.byId("sw_max"), ret.result.sw_max);
+      $api.text($api.byId("sw_min"), ret.result.sw_min);
+      $api.text($api.byId("weight_control"), ret.result.weight_control);
+      $api.text($api.byId("unit_weight"), ret.result.unit.weight);
+      $api.text($api.byId("unit_sw_max"), ret.result.unit.sw_max);
+      $api.text($api.byId("unit_sw_min"), ret.result.unit.sw_min);
+      $api.text($api.byId("unit_weight_control"), ret.result.unit.weight_control);
+
+
+      $api.text($api.byId("fat_percentage"), ret.result.fat_percentage);
+      if(ret.result.fat_percentage_red == true){
+        $api.css($api.byId("fat_percentage"), "color:red")
+      }
+      $api.text($api.byId("fat_percentage_max"), ret.result.fat_percentage_max);
+      $api.text($api.byId("fat_percentage_min"), ret.result.fat_percentage_min);
+      $api.text($api.byId("unit_fat_percentage"), ret.result.unit.fat_percentage);
+      $api.text($api.byId("unit_fat_percentage_max"), ret.result.unit.fat_percentage_max);
+      $api.text($api.byId("unit_fat_percentage_min"), ret.result.unit.fat_percentage_min);
+
+
+      $api.text($api.byId("fat_weight"), ret.result.fat_weight);
+      if(ret.result.fat_weight_red == true){
+        $api.css($api.byId("fat_weight"), "color:red")
+      }
+      $api.text($api.byId("fat_weight_max"), ret.result.fat_weight_max);
+      $api.text($api.byId("fat_weight_min"), ret.result.fat_weight_min);
+      $api.text($api.byId("unit_fat_weight"), ret.result.unit.fat_weight);
+      $api.text($api.byId("unit_fat_weight_max"), ret.result.unit.fat_weight_max);
+      $api.text($api.byId("unit_fat_weight_min"), ret.result.unit.fat_weight_min);
+
+
+      $api.text($api.byId("muscle_weight"), ret.result.muscle_weight);
+      if(ret.result.muscle_weight_red == true){
+        $api.css($api.byId("muscle_weight"), "color:red")
+      }
+      $api.text($api.byId("muscle_weight_max"), ret.result.muscle_weight_max);
+      $api.text($api.byId("muscle_weight_min"), ret.result.muscle_weight_min);
+      $api.text($api.byId("unit_muscle_weight"), ret.result.unit.muscle_weight);
+      $api.text($api.byId("unit_muscle_weight_max"), ret.result.unit.muscle_weight_max);
+      $api.text($api.byId("unit_muscle_weight_min"), ret.result.unit.muscle_weight_min);
+
+
+      $api.text($api.byId("bone_muscle_weight"), ret.result.bone_muscle_weight);
+      if(ret.result.bone_muscle_weight_red == true){
+        $api.css($api.byId("bone_muscle_weight"), "color:red")
+      }
+      $api.text($api.byId("bone_muscle_weight_max"), ret.result.bone_muscle_weight_max);
+      $api.text($api.byId("bone_muscle_weight_min"), ret.result.bone_muscle_weight_min);
+      $api.text($api.byId("unit_bone_muscle_weight"), ret.result.unit.bone_muscle_weight);
+      $api.text($api.byId("unit_bone_muscle_weight_max"), ret.result.unit.bone_muscle_weight_max);
+      $api.text($api.byId("unit_bone_muscle_weight_min"), ret.result.unit.bone_muscle_weight_min);
+
+
+      $api.text($api.byId("water_weight"), ret.result.water_weight);
+      if(ret.result.water_weight_red == true){
+        $api.css($api.byId("water_weight"), "color:red")
+      }
+      $api.text($api.byId("water_weight_max"), ret.result.water_weight_max);
+      $api.text($api.byId("water_weight_min"), ret.result.water_weight_min);
+      $api.text($api.byId("unit_water_weight"), ret.result.unit.water_weight);
+      $api.text($api.byId("unit_water_weight_max"), ret.result.unit.water_weight_max);
+      $api.text($api.byId("unit_water_weight_min"), ret.result.unit.water_weight_min);
+
+
+      $api.text($api.byId("protein_weight"), ret.result.protein_weight);
+      if(ret.result.protein_weight_red == true){
+        $api.css($api.byId("protein_weight"), "color:red")
+      }
+      $api.text($api.byId("protein_weight_max"), ret.result.protein_weight_max);
+      $api.text($api.byId("protein_weight_min"), ret.result.protein_weight_min);
+      $api.text($api.byId("unit_protein_weight"), ret.result.unit.protein_weight);
+      $api.text($api.byId("unit_protein_weight_max"), ret.result.unit.protein_weight_max);
+      $api.text($api.byId("unit_protein_weight_min"), ret.result.unit.protein_weight_min);
+
+
+      $api.text($api.byId("bmi"), ret.result.bmi);
+      if(ret.result.bmi_red == true){
+        $api.css($api.byId("bmi"), "color:red")
+      }
+      $api.text($api.byId("bmi_max"), ret.result.bmi_max);
+      $api.text($api.byId("bmi_min"), ret.result.bmi_min);
+      $api.text($api.byId("unit_bmi"), ret.result.unit.bmi);
+      $api.text($api.byId("unit_bmi_max"), ret.result.unit.bmi_max);
+      $api.text($api.byId("unit_bmi_min"), ret.result.unit.bmi_min);
+
+
+      $api.text($api.byId("bone_weight"), ret.result.bone_weight);
+      if(ret.result.bone_weight_red == true){
+        $api.css($api.byId("bone_weight"), "color:red")
+      }
+      $api.text($api.byId("bone_weight_max"), ret.result.bone_weight_max);
+      $api.text($api.byId("bone_weight_min"), ret.result.bone_weight_min);
+      $api.text($api.byId("unit_bone_weight"), ret.result.unit.bone_weight);
+      $api.text($api.byId("unit_bone_weight_max"), ret.result.unit.bone_weight_max);
+      $api.text($api.byId("unit_bone_weight_min"), ret.result.unit.bone_weight_min);
+
+
+      $api.text($api.byId("visceral_fat_percentage"), ret.result.visceral_fat_percentage);
+      if(ret.result.visceral_fat_percentage_red == true){
+        $api.css($api.byId("visceral_fat_percentage"), "color:red")
+      }
+      $api.text($api.byId("visceral_fat_percentage_max"), ret.result.visceral_fat_percentage_max);
+      $api.text($api.byId("visceral_fat_percentage_min"), ret.result.visceral_fat_percentage_min);
+      $api.text($api.byId("unit_visceral_fat_percentage"), ret.result.unit.visceral_fat_percentage);
+      $api.text($api.byId("unit_visceral_fat_percentage_max"), ret.result.unit.visceral_fat_percentage_max);
+      $api.text($api.byId("unit_visceral_fat_percentage_min"), ret.result.unit.visceral_fat_percentage_min);
+
+
+      $api.text($api.byId("fat_level"), ret.result.fat_level);
+      $api.text($api.byId("unit_fat_level"), ret.result.unit.fat_level);
+
+
+      $api.text($api.byId("physique"), ret.result.physique);
+      $api.text($api.byId("unit_physique"), ret.result.unit.physique);
+
+
+      $api.text($api.byId("bmr"), ret.result.bmr);
+      $api.text($api.byId("unit_bmr"), ret.result.unit.bmr);
+
+      $api.text($api.byId("score"), ret.result.score);
+      $api.text($api.byId("unit_score"), ret.result.unit.score);
+
+      $api.text($api.byId("body_age"), ret.result.body_age);
+      $api.text($api.byId("unit_body_age"), ret.result.unit.body_age);
+
+
+      $api.val($api.byId("weight_word"), ret.result.weight_word);
+      $api.val($api.byId("muscle_weight_word"), ret.result.muscle_weight_word);
+      $api.val($api.byId("protein_weight_word"), ret.result.protein_weight_word);
+      $api.val($api.byId("bone_weight_word"), ret.result.bone_weight_word);
+      $api.val($api.byId("water_weight_word"), ret.result.water_weight_word);
+      $api.val($api.byId("fat_weight_word"), ret.result.fat_weight_word);
+      $api.val($api.byId("fat_percentage_word"), ret.result.fat_percentage_word);
+      $api.val($api.byId("visceral_fat_percentage_word"), ret.result.visceral_fat_percentage_word);
+      $api.val($api.byId("bmi_word"), ret.result.bmi_word);
+      $api.val($api.byId("bmr_word"), ret.result.bmr_word);
+      $api.val($api.byId("bone_muscle_weight_word"), ret.result.bone_muscle_weight_word);
+      $api.val($api.byId("fat_level_word"), ret.result.fat_level_word);
+
+    }
+
+    function putStorInfo(ret) {
+        //血压
+        $api.text($api.byId("xy_time"), ret.result.BloodPressure.time);
+        $api.text($api.byId("xy_height"), ret.result.BloodPressure.high);
+        $api.text($api.byId("xy_low"), ret.result.BloodPressure.low);
+        if (ret.result.BloodPressure.high_red == true) {
+            $api.css($api.byId("xy_height"), "color:red");
+        }
+        if (ret.result.BloodPressure.low_red == true) {
+            $api.css($api.byId("xy_low"), "color:red");
+        }
+
+        //血糖
+        $api.text($api.byId("xt_time"), ret.result.BloodSugar.time);
+        if (ret.result.BloodSugar.is_before_meal == 1) {
+            $api.text($api.byId("xt_is_meal"), "餐前");
+            $api.addCls($api.byId("xt_is_meal"), '1');
+
+        } else {
+            $api.text($api.byId("xt_is_meal"), "餐后");
+            $api.addCls($api.byId('xt_is_meal'), "0");
+        }
+        $api.text($api.byId("xt_value"), ret.result.BloodSugar.value);
+        if (ret.result.BloodSugar.value_red == true) {
+            $api.css($api.byId("xt_value"), "color:red");
+        }
+
+        //血脂
+        $api.text($api.byId("xz_time"), ret.result.BloodLipid.time);
+        $api.text($api.byId("xz_tc"), ret.result.BloodLipid.tc);
+        $api.text($api.byId("xz_tg"), ret.result.BloodLipid.tg);
+        $api.text($api.byId("xz_hdlc"), ret.result.BloodLipid.hdl_c);
+        $api.text($api.byId("xz_ldlc"), ret.result.BloodLipid.ldl_c);
+        $api.text($api.byId("xz_target"), ret.result.BloodLipid.ldl_c_target);
+        if (ret.result.BloodLipid.tc_red == true) {
+            $api.css($api.byId("xz_tc"), "color:red");
+        }
+        if (ret.result.BloodLipid.tg_red == true) {
+            $api.css($api.byId("xz_tg"), "color:red");
+        }
+        if (ret.result.BloodLipid.hdl_c_red == true) {
+            $api.css($api.byId("xz_hdlc"), "color:red");
+        }
+        if (ret.result.BloodLipid.ldl_c_red == true) {
+            $api.css($api.byId("xz_ldlc"), "color:red");
+        }
+
+        //血凝
+        $api.text($api.byId("xn_time"), ret.result.BloodClotting.time);
+        $api.text($api.byId("xn_aptt"), ret.result.BloodClotting.aptt);
+        $api.text($api.byId("xn_pt"), ret.result.BloodClotting.pt);
+        $api.text($api.byId("xn_fib"), ret.result.BloodClotting.fib);
+        $api.text($api.byId("xn_tt"), ret.result.BloodClotting.tt);
+        $api.text($api.byId("xn_inr"), ret.result.BloodClotting.inr);
+        if (ret.result.BloodClotting.aptt_red == true) {
+            $api.css($api.byId("xn_aptt"), "color:red");
+        }
+        // if (ret.result.BloodClotting.fib_red == true) {
+        //     $api.css($api.byId("xn_aptt"), "color:red");
+        // }
+        if (ret.result.BloodClotting.pt_red == true) {
+            $api.css($api.byId("xn_pt"), "color:red");
+        }
+        if (ret.result.BloodClotting.inr_red == true) {
+            $api.css($api.byId("xn_inr"), "color:red");
+        }
+        if (ret.result.BloodClotting.tt_red == true) {
+            $api.css($api.byId("xn_tt"), "color:red");
+        }
+
+        //血氧
+        $api.text($api.byId("xyang_time"), ret.result.BloodOxygen.time);
+        $api.text($api.byId("xyang_value"), ret.result.BloodOxygen.value);
+
+        //心率
+        $api.text($api.byId("xl_time"), ret.result.HeartRate.time);
+        $api.text($api.byId("xl_value"), ret.result.HeartRate.value);
+        if (ret.result.HeartRate.value_red == true) {
+            $api.css($api.byId("xl_value"), "color:red")
+        }
+
+        //心电图
+        if(ret.result.Electrocardiogram != null || ret.result.Electrocardiogram.length>0){
+          $api.text($api.byId("xdt_time"), ret.result.Electrocardiogram[0].time);
+        }
+
+        //UACR
+        $api.text($api.byId("uacr_time"), ret.result.Uacr.time);
+        $api.text($api.byId("uacr_value"), ret.result.Uacr.value);
+        if (ret.result.Uacr.value_red == true) {
+            $api.css($api.byId("uacr_value"), "color:red")
+        }
+
+        //尿酸
+        $api.text($api.byId("ns_time"), ret.result.UricAcid.time);
+        $api.text($api.byId("ns_value"), ret.result.UricAcid.value);
+        if (ret.result.UricAcid.value_red == true) {
+            $api.css($api.byId("ns_value"), "color:red")
+        }
+
+        //尿白蛋白
+        $api.text($api.byId("nbdb_time"), ret.result.UrinaryAlbumin.time);
+        $api.text($api.byId("nbdb_value"), ret.result.UrinaryAlbumin.value);
+        if (ret.result.UrinaryAlbumin.value_red == true) {
+            $api.css($api.byId("nbdb_value"), "color:red")
+        }
+
+        //尿肌酐
+        $api.text($api.byId("njg_time"), ret.result.UrineCreatinine.time);
+        $api.text($api.byId("njg_value"), ret.result.UrineCreatinine.value);
+        if (ret.result.UrineCreatinine.value_red == true) {
+            $api.css($api.byId("njg_value"), "color:red")
+        }
+
+        //尿白细胞
+        $api.text($api.byId("nbxb_time"), ret.result.UrinaryWhiteBloodCell.time);
+        $api.text($api.byId("nbxb_value"), ret.result.UrinaryWhiteBloodCell.value);
+        $api.text($api.byId("is_positive"), ret.result.UrinaryWhiteBloodCell.is_positive);
+        if (ret.result.UrinaryWhiteBloodCell.is_positive_red == true) {
+            $api.css($api.byId("is_positive"), "color:red");
+        }
+        if (ret.result.UrinaryWhiteBloodCell.is_positive == 1) {
+            $api.text($api.byId("is_positive_value"), '阳性');
+            $api.css($api.byId("is_positive_value"), "color:red");
+        } else {
+            $api.text($api.byId("is_positive_value"), '阴性');
+        }
+
+    }
+
+    function updateXy() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BloodPressure',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xy_time"), ret.result.time);
+                $api.text($api.byId("xy_height"), ret.result.high);
+                $api.text($api.byId("xy_low"), ret.result.low);
+                if (ret.result.high_red == true) {
+                    $api.css($api.byId("xy_height"), "color:red");
+                }
+                if (ret.result.low_red == true) {
+                    $api.css($api.byId("xy_low"), "color:red");
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+
+    function updateXt() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BloodSugar',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xt_time"), ret.result.time);
+                if (ret.result.is_before_meal == 1) {
+                    $api.text($api.byId("xt_is_meal"), "餐前");
+                } else {
+                    $api.text($api.byId("xt_is_meal"), "餐后");
+                }
+                $api.text($api.byId("xt_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("xt_value"), "color:red");
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateXz() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BloodLipid',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xz_time"), ret.result.time);
+                $api.text($api.byId("xz_tc"), ret.result.tc);
+                $api.text($api.byId("xz_tg"), ret.result.tg);
+                $api.text($api.byId("xz_hdlc"), ret.result.hdl_c);
+                $api.text($api.byId("xz_ldlc"), ret.result.ldl_c);
+                $api.text($api.byId("xz_target"), ret.result.ldl_c_target);
+                if (ret.result.tc_red == true) {
+                    $api.css($api.byId("xz_tc"), "color:red");
+                }
+                if (ret.result.tg_red == true) {
+                    $api.css($api.byId("xz_tg"), "color:red");
+                }
+                if (ret.result.hdl_c_red == true) {
+                    $api.css($api.byId("xz_hdlc"), "color:red");
+                }
+                if (ret.result.ldl_c_red == true) {
+                    $api.css($api.byId("xz_ldlc"), "color:red");
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateXn() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BloodClotting',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xn_time"), ret.result.time);
+                $api.text($api.byId("xn_aptt"), ret.result.aptt);
+                $api.text($api.byId("xn_pt"), ret.result.pt);
+                $api.text($api.byId("xn_fib"), ret.result.fib);
+                $api.text($api.byId("xn_tt"), ret.result.tt);
+                $api.text($api.byId("xn_inr"), ret.result.inr);
+                if (ret.result.aptt_red == true) {
+                    $api.css($api.byId("xn_aptt"), "color:red");
+                }
+                // if (ret.result.fib_red == true) {
+                //     $api.css($api.byId("xn_aptt"), "color:red");
+                // }
+                if (ret.result.pt_red == true) {
+                    $api.css($api.byId("xn_pt"), "color:red");
+                }
+                if (ret.result.inr_red == true) {
+                    $api.css($api.byId("xn_inr"), "color:red");
+                }
+                if (ret.result.tt_red == true) {
+                    $api.css($api.byId("xn_tt"), "color:red");
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateXyang() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/BloodOxygen',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xyang_time"), ret.result.time);
+                $api.text($api.byId("xyang_value"), ret.result.value);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateXl() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/HeartRate',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("xl_time"), ret.result.time);
+                $api.text($api.byId("xl_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("xl_value"), "color:red")
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateUacr() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/Uacr',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("uacr_time"), ret.result.time);
+                $api.text($api.byId("uacr_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("uacr_value"), "color:red")
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateNs() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/UricAcid',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("ns_time"), ret.result.time);
+                $api.text($api.byId("ns_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("ns_value"), "color:red")
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateNbdb() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/UrinaryAlbumin',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("nbdb_time"), ret.result.time);
+                $api.text($api.byId("nbdb_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("nbdb_value"), "color:red")
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateNjg() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/UrineCreatinine',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("njg_time"), ret.result.time);
+                $api.text($api.byId("njg_value"), ret.result.value);
+                if (ret.result.value_red == true) {
+                    $api.css($api.byId("njg_value"), "color:red")
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function updateNbxb() {
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_detail/UrinaryWhiteBloodCell',
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+            data: {}
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId("nbxb_time"), ret.result.time);
+                $api.text($api.byId("nbxb_value"), ret.result.value);
+                $api.text($api.byId("is_positive"), ret.result.is_positive);
+                if (ret.result.is_positive_red == true) {
+                    $api.css($api.byId("is_positive"), "color:red");
+                }
+                if (ret.result.is_positive == 1) {
+                    $api.text($api.byId("is_positive_value"), '阳性');
+                    $api.css($api.byId("is_positive_value"), "color:red");
+                } else {
+                    $api.text($api.byId("is_positive_value"), '阴性');
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function deleteDetail(pro) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (personalInfo == undefined) {
+            alert("您还未登录！请先登录~")
+        } else {
+
+            var token = personalInfo.result.token;
+            if (pro == 'xy') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/BloodPressure',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xy_time"), ret.result.time);
+                                    $api.text($api.byId("xy_height"), ret.result.high);
+                                    $api.text($api.byId("xy_low"), ret.result.low);
+                                    if (ret.result.high_red == true) {
+                                        $api.css($api.byId("xy_height"), "color:red");
+                                    }
+                                    if (ret.result.low_red == true) {
+                                        $api.css($api.byId("xy_low"), "color:red");
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+
+            } else if (pro == 'xt') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/BloodSugar',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xt_time"), ret.result.time);
+                                    if (ret.result.is_before_meal == 1) {
+                                        $api.text($api.byId("xt_is_meal"), "餐前");
+                                    } else {
+                                        $api.text($api.byId("xt_is_meal"), "餐后");
+                                    }
+                                    $api.text($api.byId("xt_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("xt_value"), "color:red");
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+
+            } else if (pro == 'xz') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/BloodLipid',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xz_time"), ret.result.time);
+                                    $api.text($api.byId("xz_tc"), ret.result.tc);
+                                    $api.text($api.byId("xz_tg"), ret.result.tg);
+                                    $api.text($api.byId("xz_hdlc"), ret.result.hdl_c);
+                                    $api.text($api.byId("xz_ldlc"), ret.result.ldl_c);
+                                    $api.text($api.byId("xz_target"), ret.result.ldl_c_target);
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'xn') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/BloodClotting',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xn_time"), ret.result.time);
+                                    $api.text($api.byId("xn_aptt"), ret.result.aptt);
+                                    $api.text($api.byId("xn_pt"), ret.result.pt);
+                                    $api.text($api.byId("xn_fib"), ret.result.fib);
+                                    $api.text($api.byId("xn_tt"), ret.result.tt);
+                                    $api.text($api.byId("xn_inr"), ret.result.inr);
+                                    if (ret.result.aptt_red == true) {
+                                        $api.css($api.byId("xn_aptt"), "color:red");
+                                    }
+                                    // if (ret.result.aptt_red == true) {
+                                    //     $api.css($api.byId("xn_aptt"), "color:red");
+                                    // }
+                                    if (ret.result.pt_red == true) {
+                                        $api.css($api.byId("xn_pt"), "color:red");
+                                    }
+                                    if (ret.result.inr_red == true) {
+                                        $api.css($api.byId("xn_inr"), "color:red");
+                                    }
+                                    if (ret.result.tt_red == true) {
+                                        $api.css($api.byId("xn_tt"), "color:red");
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'xyang') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/BloodOxygen',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xyang_time"), ret.result.time);
+                                    $api.text($api.byId("xyang_value"), ret.result.value);
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'xl') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/HeartRate',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("xl_time"), ret.result.time);
+                                    $api.text($api.byId("xl_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("xl_value"), "color:red")
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'uacr') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/Uacr',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("uacr_time"), ret.result.time);
+                                    $api.text($api.byId("uacr_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("uacr_value"), "color:red")
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'ns') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/UricAcid',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("ns_time"), ret.result.time);
+                                    $api.text($api.byId("ns_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("ns_value"), "color:red")
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'nbdb') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/UrinaryAlbumin',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("nbdb_time"), ret.result.time);
+                                    $api.text($api.byId("nbdb_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("nbdb_value"), "color:red")
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'njg') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/UrineCreatinine',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("njg_time"), ret.result.time);
+                                    $api.text($api.byId("njg_value"), ret.result.value);
+                                    if (ret.result.value_red == true) {
+                                        $api.css($api.byId("njg_value"), "color:red")
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else if (pro == 'nbxb') {
+                api.confirm({
+                    title: '删除',
+                    msg: '是否删除当前数据',
+                    buttons: ['确定', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            api.ajax({
+                                url: 'http://api.zkhealth.com.cn/phone_patient/destroy/patient_detail/UrinaryWhiteBloodCell',
+                                method: 'post',
+                                headers: {
+                                    'Authorization': token
+                                },
+                                data: {}
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.text($api.byId("nbxb_time"), ret.result.time);
+                                    $api.text($api.byId("nbxb_value"), ret.result.value);
+                                    $api.text($api.byId("is_positive"), ret.result.is_positive);
+                                    if (ret.result.is_positive_red == true) {
+                                        $api.css($api.byId("is_positive"), "color:red");
+                                    }
+                                    if (ret.result.is_positive == 1) {
+                                        $api.text($api.byId("is_positive_value"), '阳性');
+                                    } else {
+                                        $api.text($api.byId("is_positive_value"), '阴性');
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            }
+        }
+
+    }
+
+    function editDetail(pro) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (personalInfo == undefined) {
+            alert("您还未登录！请先登录~")
+        } else {
+
+            var token = personalInfo.result.token;
+
+            if (pro == 'xy') {
+                var xy_high = $api.text($api.byId('xy_height'));
+                var xy_low = $api.text($api.byId('xy_low'));
+
+                api.openFrame({
+                    name: 'edit_xy',
+                    url: './detail/edit_xy.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xy_high: xy_high,
+                        xy_low: xy_low
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+
+            } else if (pro == 'xt') {
+                var xt_value = $api.text($api.byId("xt_value"));
+                var is_meal = $api.attr($api.byId("xt_is_meal"), 'class');
+
+                api.openFrame({
+                    name: 'edit_xt',
+                    url: './detail/edit_xt.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xt_value: xt_value,
+                        is_meal: is_meal
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xz') {
+                var xz_tc = $api.text($api.byId("xz_tc"));
+                var xz_tg = $api.text($api.byId("xz_tg"));
+                var xz_hdlc = $api.text($api.byId("xz_hdlc"));
+                var xz_ldlc = $api.text($api.byId("xz_ldlc"));
+
+                api.openFrame({
+                    name: 'edit_xz',
+                    url: './detail/edit_xz.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xz_tc: xz_tc,
+                        xz_tg: xz_tg,
+                        xz_hdlc: xz_hdlc,
+                        xz_ldlc: xz_ldlc
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xn') {
+                var xn_tt = $api.text($api.byId("xn_tt"));
+                var xn_pt = $api.text($api.byId("xn_pt"));
+                var xn_aptt = $api.text($api.byId("xn_aptt"));
+                var xn_fib = $api.text($api.byId("xn_fib"));
+                var xn_inr = $api.text($api.byId("xn_inr"));
+
+                api.openFrame({
+                    name: 'edit_xn',
+                    url: './detail/edit_xn.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xn_tt: xn_tt,
+                        xn_pt: xn_pt,
+                        xn_aptt: xn_aptt,
+                        xn_fib: xn_fib,
+                        xn_inr: xn_inr
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xyang') {
+                var xyang_value = $api.text($api.byId("xyang_value"));
+                api.openFrame({
+                    name: 'edit_xyang',
+                    url: './detail/edit_xyang.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xyang_value: xyang_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xl') {
+                var xl_value = $api.text($api.byId("xl_value"));
+
+                api.openFrame({
+                    name: 'edit_xl',
+                    url: './detail/edit_xl.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        xl_value: xl_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'uacr') {
+                var uacr_value = $api.text($api.byId('uacr_value'));
+
+                api.openFrame({
+                    name: 'edit_uacr',
+                    url: './detail/edit_uacr.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        uacr_value: uacr_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'ns') {
+                var ns_value = $api.text($api.byId('ns_value'));
+
+                api.openFrame({
+                    name: 'edit_ns',
+                    url: './detail/edit_ns.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        ns_value: ns_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'nbdb') {
+                var nbdb_value = $api.text($api.byId('nbdb_value'));
+
+                api.openFrame({
+                    name: 'edit_nbdb',
+                    url: './detail/edit_nbdb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        nbdb_value: nbdb_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'njg') {
+                var njg_value = $api.text($api.byId('njg_value'));
+
+                api.openFrame({
+                    name: 'edit_njg',
+                    url: './detail/edit_njg.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        njg_value: njg_value
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'nbxb') {
+                api.openFrame({
+                    name: 'edit_nbxb',
+                    url: './detail/edit_nbxb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            }
+        }
+    }
+
+    function openView(pro) {
+        if (personalInfo == undefined) {
+            alert("您还未登录！请先登录")
+        } else {
+            if (pro == 'xy') {
+                api.openFrame({
+                    name: 'view_xy',
+                    url: './view/view_xy.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+
+            } else if (pro == 'xt') {
+                api.openFrame({
+                    name: 'view_xt',
+                    url: './view/view_xt.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xz') {
+                api.openFrame({
+                    name: 'view_xz',
+                    url: './view/view_xz.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xn') {
+                api.openFrame({
+                    name: 'view_xn',
+                    url: './view/view_xn.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xyang') {
+                api.openFrame({
+                    name: 'view_xyang',
+                    url: './view/view_xyang.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xl') {
+                api.openFrame({
+                    name: 'view_xl',
+                    url: './view/view_xl.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'uacr') {
+                api.openFrame({
+                    name: 'view_uacr',
+                    url: './view/view_uacr.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'ns') {
+                api.openFrame({
+                    name: 'view_ns',
+                    url: './view/view_ns.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'nbdb') {
+                api.openFrame({
+                    name: 'view_nbdb',
+                    url: './view/view_nbdb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'njg') {
+                api.openFrame({
+                    name: 'view_njg',
+                    url: './view/view_njg.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'nbxb') {
+                api.openFrame({
+                    name: 'view_nbxb',
+                    url: './view/view_nbxb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            }
+        }
+    }
+
+    function word(pro) {
+      if( personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else{
+        if(pro == "tizhong"){
+          var weight_word = $api.val($api.byId("weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+
+        }else if (pro == "tizhi") {
+          var fat_percentage_word = $api.val($api.byId("fat_percentage_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: fat_percentage_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "zhifang") {
+          var fat_weight_word = $api.val($api.byId("fat_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: fat_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "jirou") {
+          var muscle_weight_word = $api.val($api.byId("muscle_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: muscle_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "gugeji") {
+          var bone_muscle_weight_word = $api.val($api.byId("bone_muscle_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: bone_muscle_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "shuifen") {
+          var water_weight_word = $api.val($api.byId("water_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: water_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "danbaizhi") {
+          var protein_weight_word = $api.val($api.byId("protein_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: protein_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "tizhizhishu") {
+          var bmi_word = $api.val($api.byId("bmi_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: bmi_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "guzhi") {
+          var bone_weight_word = $api.val($api.byId("bone_weight_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: bone_weight_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "neizang") {
+          var visceral_fat_percentage_word = $api.val($api.byId("visceral_fat_percentage_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: visceral_fat_percentage_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "feipang") {
+          var fat_level_word = $api.val($api.byId("fat_level_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: fat_level_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }else if (pro == "daixie") {
+          var bmr_word = $api.val($api.byId("bmr_word"));
+
+          api.openFrame({
+              name: 'word',
+              url: './detail/word.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              pageParam: {
+                  str: bmr_word
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+              vScrollBarEnabled: false,
+              hScrollBarEnabled: false
+          });
+        }
+      }
+    }
+    function lkXdt() {
+      if( personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else{
+        api.openFrame({
+            name: 'xdt',
+            url: './detail/xdt.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                // str: bmr_word
+            },
+            bounces: false,
+            bgColor: 'rgba(0,0,0,0.1)',
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false
+        });
+      }
+    }
+</script>
+
+</html>

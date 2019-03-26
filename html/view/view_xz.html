@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html onclick="closeframe()">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style>
+        html,
+        body {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .form {  background-color: #fff;margin-top: 22%;}
+        #charts{width:100%;height:300px;}
+    </style>
+</head>
+
+<body>
+  <div class="form" onclick="stopEvent()">
+      <div class="charts" id="charts">
+
+      </div>
+  </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/echarts.min.js"></script>
+<script type="text/javascript">
+
+var personalInfo = $api.getStorage('personalInfo');
+var token = personalInfo.result.token;
+
+    apiready = function() {
+      var date = [];
+      var tc = [];
+      var tg = [];
+      var ldlc = [];
+      var hdlc = [];
+      var id = [];
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_graph/BloodLipid',
+          method: 'post',
+          headers:{
+            'Authorization': token
+          },
+          data: { }
+      },function(ret, err){
+          if (ret) {
+            for ( var i = 0; i<ret.result.length; i++) {
+              date.push(ret.result[i].time);
+              tc.push(ret.result[i].tc);
+              tg.push(ret.result[i].tg);
+              ldlc.push(ret.result[i].ldl_c);
+              hdlc.push(ret.result[i].hdl_c);
+              id.push(ret.result[i].id);
+            }
+
+            myChart.setOption(option);
+
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+
+      api.addEventListener({
+          name: 'swiperight'
+      }, function(){
+
+            api.ajax({
+                url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_graph/BloodLipid',
+                method: 'post',
+                headers:{
+                  'Authorization': token
+                },
+                data: {
+                    values: {
+                        last_id: id[0]
+                    }
+                }
+            },function(ret, err){
+                if (ret && ret.result != undefined) {
+                  // console.log(JSON.stringify(ret));
+                  date = [];
+                  tc = [];
+                  tg = [];
+                  ldlc = [];
+                  hdlc = [];
+                  id  = [];
+                    for ( var i = 0; i<ret.result.length; i++) {
+                      date.push(ret.result[i].time);
+                      tc.push(ret.result[i].tc);
+                      tg.push(ret.result[i].tg);
+                      ldlc.push(ret.result[i].ldl_c);
+                      hdlc.push(ret.result[i].hdl_c);
+                      id.push(ret.result[i].id);
+                    }
+                    var option = myChart.getOption();
+                    option.series[0].data = tc;
+                    option.series[1].data = tg;
+                    option.series[2].data = ldlc;
+                    option.series[3].data = hdlc;
+                    option.xAxis[0].data = date;
+                    myChart.clear();
+                    myChart.setOption(option,true);
+
+                } else {
+                    alert( '没有更多数据' );
+                }
+            });
+      });
+
+      api.addEventListener({
+          name: 'swipeleft'
+      }, function(){
+            var ind = id.length-1;
+            api.ajax({
+                url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_graph/BloodLipid',
+                method: 'post',
+                headers:{
+                  'Authorization': token
+                },
+                data: {
+                    values: {
+                        next_id: id[ind]
+                    }
+                }
+            },function(ret, err){
+                if (ret && ret.result != undefined) {
+                  // console.log(JSON.stringify(ret));
+                  date = [];
+                  tc = [];
+                  tg = [];
+                  ldlc = [];
+                  hdlc = [];
+                  id  = [];
+                    for ( var i = 0; i<ret.result.length; i++) {
+                      date.push(ret.result[i].time);
+                      tc.push(ret.result[i].tc);
+                      tg.push(ret.result[i].tg);
+                      ldlc.push(ret.result[i].ldl_c);
+                      hdlc.push(ret.result[i].hdl_c);
+                      id.push(ret.result[i].id);
+                    }
+                    var option = myChart.getOption();
+                    option.series[0].data = tc;
+                    option.series[1].data = tg;
+                    option.series[2].data = ldlc;
+                    option.series[3].data = hdlc;
+                    option.xAxis[0].data = date;
+                    myChart.clear();
+                    myChart.setOption(option,true);
+
+                } else {
+                    alert( '没有更多数据' );
+                }
+            });
+      });
+
+
+      var myChart = echarts.init(document.getElementById('charts'));
+
+      var option = {
+          title: {
+              text: '血脂',
+              left:'right',
+              top:"20px"
+          },
+          // tooltip: {
+          //     trigger: 'axis'
+          // },
+
+          color:["#4BD6D4","#FF7F66","#00B096","#FFA500"],
+          legend: {
+              data:['TC','TG','LDL-C','HDL-C'],
+              top:'20px'
+          },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
+          xAxis: {
+              axisTick:{       //x轴刻度线
+                show:false
+              },
+              splitLine:{
+      		      show:false     //网格
+      		    },
+              axisLabel: {
+                 interval:0,
+                 rotate:40
+              } ,
+              type: 'category',
+              boundaryGap: true,
+              data: date
+          },
+          yAxis: {
+              axisTick:{       //y轴刻度线
+                show:false
+              },
+              splitLine:{
+                  show:false
+              },
+              type: 'value',
+              name:''
+          },
+          series: [
+              {
+                  name:'TC',
+                  type:'line',
+                  data:tc,
+                  itemStyle : { normal: {label : {show: true}}}, //显示拐点数字
+                  symbol: 'circle'  //拐点实心
+              },
+              {
+                  name:'TG',
+                  type:'line',
+                  data:tg,
+                  itemStyle : { normal: {label : {show: true}}},
+                  symbol: 'circle'
+              },
+              {
+                  name:'LDL-C',
+                  type:'line',
+                  data:ldlc,
+                  itemStyle : { normal: {label : {show: true}}},
+                  symbol: 'circle'
+              },
+              {
+                  name:'HDL-C',
+                  type:'line',
+                  data:hdlc,
+                  itemStyle : { normal: {label : {show: true}}},
+                  symbol: 'circle'
+              }
+          ]
+      };
+
+    }
+
+    function stopEvent() {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    function closeframe() {
+        api.closeFrame();
+    }
+</script>
+
+</html>

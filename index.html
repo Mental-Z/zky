@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>底部导航</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <link rel="stylesheet" href="./css/aui.css">
+    <style>
+        header{ background-color: #00B096; }
+        header ul li { height: 50px; line-height: 50px; text-align: center; display: none; color: #fff; position: relative;font-size: 22px;  }
+        header ul li.active{ display: block; }
+        #footer{  background-color: #fff; }
+        #footer ul li{  padding-top: 36px; padding-bottom: 4px; background: url() no-repeat center 2px; background-size: auto 30px; text-align: center; font-size: 12px; }
+        #footer ul li.active{ color: #6ab494; }
+        #footer ul li:nth-child(1){ background-image: url(./image/bottom_res01.png); }
+        #footer ul li:nth-child(2){ background-image: url(./image/bottom_his01.png); }
+        #footer ul li:nth-child(3){ background-image: url(./image/bottom_art01.png); }
+        #footer ul li:nth-child(4){ background-image: url(./image/bottom_chat02.png); }
+        #footer ul li:nth-child(5){ background-image: url(./image/bottom_per01.png); }
+        #footer ul li:nth-child(1).active{ background-image: url(./image/bottom_res02.png); }
+        #footer ul li:nth-child(2).active{ background-image: url(./image/bottom_his02.png); }
+        #footer ul li:nth-child(3).active{ background-image: url(./image/bottom_art02.png); }
+        #footer ul li:nth-child(4).active{ background-image: url(./image/bottom_chat01.png); }
+        #footer ul li:nth-child(5).active{ background-image: url(./image/bottom_per02.png); }
+        .flex-con{
+          overflow: auto
+        }
+    </style>
+</head>
+<body>
+<div id="wrap" class="flex-wrap flex-vertical">
+    <header>
+        <ul>
+            <li class="border-b active" >检测结果</li>
+            <li class="border-b" >既往病史</li>
+            <li class="border-b" >咨询文章</li>
+            <li class="border-b" >医患交流</li>
+            <li class="border-b" >个人中心</li>
+        </ul>
+    </header>
+    <div id="main" class="flex-con">
+<!-- <div class="aui-dot"></div> -->
+    </div>
+    <div id="footer" class="border-t">
+        <ul class="flex-wrap" >
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" id="result" class="flex-con active" >检测结果</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >既往病史</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >咨询文章</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >医患交流</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" id="person" class="flex-con" >个人中心</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        // $api.clearStorage();
+        var ci = 0;
+        var time1, time2;
+        api.addEventListener({
+        name : 'keyback'
+        }, function(ret, err) {
+        if (ci == 0) {
+        time1 = new Date().getTime();
+        ci = 1;
+
+         api.toast({msg:'再按一次返回键退出'});
+
+        } else if (ci == 1) {
+        time2 = new Date().getTime();
+        if (time2 - time1 < 3000) {
+        api.closeWidget({
+        id : api.appId,
+        retData : {
+        name : 'closeWidget'
+        },
+        silent : true
+        });
+        } else {
+        ci = 0;
+         api.toast({msg:'再按一次返回键退出'});
+        }
+        }
+        });
+
+
+        var personalInfo = $api.getStorage('personalInfo');
+
+        $api.fixStatusBar( $api.dom('header') );
+        $api.dom('header').offsetHeight;
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#00B096'
+        });
+
+        funIniGroup();
+
+        if(personalInfo!=undefined){
+
+        }else{
+          var tag = $api.byId("person");
+          randomSwitchBtn(tag);
+        }
+
+    }
+
+    function funIniGroup(){
+        var eHeaderLis = $api.domAll('header li'),
+            frames = [];
+        for (var i = 0,len = eHeaderLis.length; i < len; i++) {
+                frames.push( {
+                    name: 'frame'+i,
+                    url: './html/frame'+i+'.html',
+                    bgColor : 'rgba(245,245,245,.2)',
+                    // bgColor : 'rgba(6,6,6,.2)',
+                    bounces:true,
+                    pageParam:{
+                        'header_height':$api.dom('header').offsetHeight,
+                        'main_height':$api.dom('#main').offsetHeight
+                    }
+                } )
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            index: 0,
+            frames: frames,
+            reload:true
+        }, function (ret, err) {
+
+        });
+    }
+
+    // 随意切换按钮
+    function randomSwitchBtn( tag ) {
+        if( tag == $api.dom('#footer li.active') )return;
+        var eFootLis = $api.domAll('#footer li'),
+            eHeaderLis = $api.domAll('header li'),
+            index = 0;
+        for (var i = 0,len = eFootLis.length; i < len; i++) {
+            if( tag == eFootLis[i] ){
+                index = i;
+            }else{
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls( eFootLis[index], 'active');
+        $api.addCls( eHeaderLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index
+        });
+    }
+</script>

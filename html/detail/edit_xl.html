@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+  <html onclick="closeEdit()">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+      <style>
+      html,body{background-color: rgba(0, 0, 0, 0.1);}
+      .title{background-color: #00B096;position: relative;height:50px;}
+      .form{background-color: #fff;margin-top: 22%;}
+      .close{position: absolute;color: #fff;left:0px;bottom: 0px;text-align: center;width:50px;line-height:50px;font-size: 16px;}
+      .save{position: absolute;color: #fff;right:0px;bottom:0px;text-align: center;width:50px;line-height: 50px;font-size: 14px;}
+      h2{text-align: center;left:auto;color: #fff;line-height: 50px;font-size: 18px;}
+      .content h3{height:30px;color: gray;margin-top: 10px;font-size: .9rem;}
+      .content{padding-left: 15px;padding-right: 15px;}
+      .content input{height:30px;width: 100%;margin-top: 10px;margin-bottom: 10px;border-bottom:1px solid #f2f2f2;padding-left: 10px;}
+      .content input:focus{outline-offset: 0;border-bottom:1px solid #00B096;outline: none;padding-left:10px}
+      </style>
+  </head>
+  <body>
+    <div class="form" onclick="stopEvent()">
+      <div class="title">
+        <span class="close" onclick="closeEdit()">X</span>
+        <h2>心率</h2>
+        <span class="save" onclick="saveEdit()">保存</span>
+      </div>
+      <div class="content">
+        <h3>心率值</h3>
+        <input type="text" name="xl_value" id="xl_value" value="">
+        <!-- <h3>PT</h3>
+        <input type="text" name="xn_pt" id="xn_pt" value="">
+        -->
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        personalInfo = $api.getStorage('personalInfo');
+
+        var xl_value = api.pageParam.xl_value;
+        $api.val($api.byId('xl_value'), xl_value);
+
+
+      };
+      function closeEdit() {
+        api.closeFrame();
+
+      }
+      function stopEvent() {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      function saveEdit() {
+        var xl_value = $api.val($api.byId("xl_value"));
+
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/new/patient_detail/HeartRate',
+            method: 'post',
+            headers:{
+              'Authorization':token,
+              // 'Content-Type': 'application/json;charset=utf-8'
+            },
+            data: {
+                values: {
+                  value: xl_value
+                }
+            }
+        },function(ret, err){
+            if (ret) {
+                // alert("成功");
+                var jsFun = 'updateXl()';
+                api.execScript({
+
+                    frameName: 'frame0',
+                    script: jsFun
+                });
+                closeEdit();
+            } else {
+                alert( JSON.stringify( err ) );
+            }
+        });
+}
+  </script>
+  </html>

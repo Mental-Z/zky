@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>既往病史</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/aui.css">
+    <style>
+        .aui-list {
+            margin-top: 25px;
+        }
+
+        .details {
+            color: gray;
+        }
+        /*.first_ul{margin:0;}*/
+
+        .aui-list .aui-list-item {
+            border-bottom: 1px solid #f5f5f5!important;
+        }
+        /*ul li{font-size: 12px;}*/
+        .aui-list-item .aui-list-item-inner .detail-div{font-size: 0.7rem;color:#757575}
+    </style>
+</head>
+
+<body>
+  <ul class="aui-list aui-list-in first_ul">
+      <!-- <li class="aui-list-header" style="padding: 12.5px 0.75rem;"></li> -->
+      <li class="aui-list-item" tapmode onclick="editHis('tz')">
+          <div class="aui-list-item-inner aui-list-item-arrow">
+              身高:
+              <span class="detail-div">
+                <span><span id="body_sg"></span>cm</span>
+              </span>
+          </div>
+      </li>
+      <li class="aui-list-item" tapmode onclick="editHis('tz')">
+          <div class="aui-list-item-inner aui-list-item-arrow">
+              体重:
+              <span class="detail-div">
+                <span><span id="body_tz"></span>kg</span>
+              </span>
+          </div>
+      </li>
+      <li class="aui-list-item">
+          <div class="aui-list-item-inner aui-list-item-arrow">
+              BMI:
+              <span class="detail-div">
+                <span><span id="body_bmi"></span></span>
+              </span>
+          </div>
+      </li>
+    </ul>
+    <ul class="aui-list aui-list-in first_ul">
+        <!-- <li class="aui-list-header" style="padding: 12.5px 0.75rem;"></li> -->
+        <li class="aui-list-item" tapmode onclick="editHis('gxy')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                高血压:
+                <span class="detail-div">
+                  <span id="is_gxy"></span>&nbsp;
+                <span id="gxy_show">
+                      <span><span id="gxy_year"></span>年</span>&nbsp;
+                <span>最高值:<span id="gxy_high"></span>/<span id="gxy_low"></span>mmHg</span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('gms')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                过敏史:
+                <span class="detail-div">
+                  <span id="is_gms"></span>&nbsp;
+                <span id="gm_show">
+                    <span>过敏原:<span id="guomy"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('tnb')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                糖尿病:
+                <span class="detail-div">
+                  <span id="is_tnb"></span>&nbsp;
+                <span id='tnb_show'>
+                    <span><span id="tnb_year"></span>年</span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <!-- <li class="aui-list-item" tapmode onclick="editHis('tz')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                体重:
+                <span class="detail-div">
+                  <span id="tz_show">
+                    <span>身高:<span id="body_sg"></span>cm</span>&nbsp;
+                <span>体重:<span id="body_tz"></span>kg</span>&nbsp;
+                <span>BMI:<span id="body_bmi"></span></span>
+                </span>
+                </span>
+            </div>
+        </li> -->
+        <li class="aui-list-item" tapmode onclick="editHis('gxzz')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                高血脂症:
+                <span class="detail-div">
+                  <span id="is_gxzz"></span>&nbsp;
+                <span id="gxzz_show">
+                    <span id="gxzz_type"></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('fc')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                房颤:
+                <span class="detail-div">
+                  <span id="is_fc"></span>&nbsp;
+                <span id="fc_show">
+                    <span>房颤年数:<span id="fc_year"></span></span>&nbsp;
+                <span>房颤类型:<span id="fc_type"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('xy')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                吸烟:
+                <span class="detail-div">
+                  <span id="is_xy"></span>&nbsp;
+                <span id="xy_show">
+                    <span>吸烟年数:<span id="xy_year"></span></span>&nbsp;
+                <span>每天数量:<span id="xy_count"></span></span>&nbsp;
+                <span>戒烟年数:<span id="stopxy_year"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('ckd')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                ckd:
+                <span class="detail-div">
+                  <span id="is_ckd"></span>&nbsp;
+                <span id="ckd_show">
+                    <span>肌酐:<span id="jig_value"></span>umol/L</span>&nbsp;
+                <span>肌酐清除率:<span id="jigqc_rate"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('gxb')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                冠心病:
+                <span class="detail-div">
+                  <span id="is_gxb"></span>&nbsp;
+                <span id="gxb_show">
+                    <span>心肌梗塞:<span id="is_xjgs"></span></span>&nbsp;
+                <span>支架:<span id="is_zj"></span></span>&nbsp;
+                <span>CABG:<span id="is_cabg"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('hdlc')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                低HDL_C:
+                <span class="detail-div">
+                  <span id="is_lowhdlc"></span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('nzz')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                脑卒中:
+                <span class="detail-div">
+                  <span id="is_ncz"></span>&nbsp;
+                <span id="ncz_show">
+                    <span>类型:<span id="ncz_type"></span></span>
+                </span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('xlsj')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                心力衰竭:
+                <div class="detail-div">
+                    <span id="is_xlsj"></span>&nbsp;
+                    <span id="xlsj_show">
+                    <span>EL值:<span id="ef_value"></span></span>
+                    </span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('tia')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                TIA:
+                <div class="detail-div">
+                    <span id="is_tia"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('zfgxb')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                早发冠心病家族史:
+                <div class="detail-div">
+                    <span id="is_zfgxb"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('gxyb')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                高血压病家族史:
+                <div class="detail-div">
+                    <span id="is_gxyb"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('ndb')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                尿蛋白:
+                <div class="detail-div">
+                    <span id="is_ndb"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('wzdm')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                外周动脉疾病:
+                <div class="detail-div">
+                    <span id="is_wzdm"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-header"></li>
+        <li class="aui-list-item" tapmode onclick="editHis('others')">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                其他:
+                <div class="detail-div">
+                    <span id="others"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-header"></li>
+        <li class="aui-list-item" tapmode onclick="editHis('ascvd')">
+            <div class="aui-list-item-inner">
+                ASCVD风险等级
+                <div class="detail-div">
+                    <span id="ascvd"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('aspl')">
+            <div class="aui-list-item-inner">
+                阿司匹林推荐等级:
+                <div class="detail-div">
+                    <span id="aspl"></span>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('esseb')">
+            <div class="aui-list-item-inner">
+                ESSEB卒由风险评估:
+                <span class="detail-div">
+                  <span id="esseb"></span>
+                </span>
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="editHis('chads')">
+            <div class="aui-list-item-inner">
+                CHADS2房额患者卒由风险评估:
+                <div class="detail-div">
+                    <span id="chads"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- <div class="empty">端API</div> -->
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        personalInfo = $api.getStorage('personalInfo');
+        bingHistory = $api.getStorage('bingHistory');
+
+        if (personalInfo != undefined) {
+            if (bingHistory != undefined && bingHistory != "" && bingHistory != null) {
+
+                getBingHistory(bingHistory);
+
+                showList();
+            }else{
+
+              var token = personalInfo.result.token;
+              showList();
+            }
+        }
+    }
+
+    function showList() {
+      var token = personalInfo.result.token;
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_jwbs/information',
+          method: 'post',
+          headers: {
+              'Authorization': token
+          },
+          data: {}
+      }, function(ret, err) {
+          if (ret) {
+              $api.setStorage('bingHistory', ret);
+
+              getBingHistory(ret);
+          }
+          else {
+              alert(JSON.stringify(err));
+          }
+      });
+    }
+
+    function getBingHistory(ret) {
+
+        $api.text($api.byId('body_sg'), ret.result.tiz.body_height);
+        $api.text($api.byId('body_tz'), ret.result.tiz.body_weight);
+        $api.text($api.byId('body_bmi'), ret.result.tiz.bmi);
+        $api.text($api.byId('others'), ret.result.other);
+        var aspl = ret.result.jis_result.阿司匹林;
+        var ascvd = ret.result.jis_result.ASCVD风险等级_1;
+        var chads = ret.result.jis_result.CHADS2房颤患者卒中风险评估;
+        $api.text($api.byId('aspl'), aspl);
+        $api.text($api.byId('ascvd'), ascvd);
+        $api.text($api.byId('chads'), chads);
+        // $api.text($api.byId('others'), ret.result.jis_result.);
+
+        // var res = bingHistory.result.jis_result;
+        // for(var p in res){      //遍历json对象的每个key/value对,p为key
+        //
+        //     alert(p + " " + res[p]);
+        //
+        //   }
+
+
+        //判断高血压
+        if (ret.result.gaoxy.is_gaoxy == 1) {
+            $api.text($api.byId('is_gxy'), '是');
+            $api.css($api.byId('is_gxy'), 'color:red');
+            $api.text($api.byId('gxy_year'), ret.result.gaoxy.year);
+            $api.text($api.byId('gxy_high'), ret.result.gaoxy.value_high);
+            $api.text($api.byId('gxy_low'), ret.result.gaoxy.value_low);
+            $api.css($api.byId('gxy_show'), 'display:inline-block');
+        } else {
+            $api.text($api.byId('is_gxy'), '否');
+            $api.css($api.byId('is_gxy'), 'color:black');
+            $api.css($api.byId('gxy_show'), 'display:none');
+        }
+
+        //判断过敏史
+        if (ret.result.guoms.is_guoms == 1) {
+            $api.text($api.byId('is_gms'), '是');
+            $api.css($api.byId('is_gms'), 'color:red');
+            $api.text($api.byId('guomy'), ret.result.guoms.guomy);
+            $api.css($api.byId('gm_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_gms'), '否');
+            $api.css($api.byId('is_gms'), 'color:black');
+            $api.css($api.byId('gm_show'), 'display:none');
+        }
+
+        //判断糖尿病
+        if (ret.result.tangnb.is_tangnb == 1) {
+            $api.text($api.byId('is_tnb'), '是');
+            $api.css($api.byId('is_tnb'), 'color:red');
+            $api.text($api.byId('tnb_year'), ret.result.tangnb.year);
+            $api.css($api.byId('tnb_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_tnb'), '否');
+            $api.css($api.byId('is_tnb'), 'color:black');
+            $api.css($api.byId('tnb_show'), 'display:none');
+        }
+
+        //判断高血脂症
+        if (ret.result.gaoxzz.is_gaoxzz == 1) {
+            $api.text($api.byId('is_gxzz'), '是');
+            $api.css($api.byId('is_gxzz'), 'color:red');
+            $api.text($api.byId('gxzz_type'), ret.result.gaoxzz.type_name);
+            $api.css($api.byId('gxzz_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_gxzz'), '否');
+            $api.css($api.byId('is_gxzz'), 'color:black');
+            $api.css($api.byId('gxzz_show'), 'display:none');
+        }
+
+        //判断房颤
+        if (ret.result.fangc.is_fangc == 1) {
+            $api.text($api.byId('is_fc'), '是');
+            $api.css($api.byId('is_fc'), 'color:red');
+            $api.text($api.byId('fc_year'), ret.result.fangc.year);
+            $api.text($api.byId('fc_type'), ret.result.fangc.type);
+            $api.css($api.byId('fc_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_fc'), '否');
+            $api.css($api.byId('is_fc'), 'color:black');
+            $api.css($api.byId('fc_show'), 'display:none');
+        }
+
+        //判断吸烟
+        if (ret.result.smoke.is_smoke == 1) {
+            $api.text($api.byId('is_xy'), '是');
+            $api.css($api.byId('is_xy'), 'color:red');
+            $api.text($api.byId('xy_year'), ret.result.smoke.year);
+            $api.text($api.byId('xy_count'), ret.result.smoke.count);
+            $api.text($api.byId('stopxy_year'), ret.result.smoke.stop_date_year);
+            $api.css($api.byId('xy_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_xy'), '否');
+            $api.css($api.byId('is_xy'), 'color:black');
+            $api.css($api.byId('xy_show'), 'display:none');
+        }
+
+        //判断ckd
+        if (ret.result.ckd.is_ckd == 1) {
+            $api.text($api.byId('is_ckd'), '是');
+            $api.css($api.byId('is_ckd'), 'color:red');
+            $api.text($api.byId('jig_value'), ret.result.ckd.jig_value);
+            $api.text($api.byId('jigqc_rate'), ret.result.ckd.jigqc_rate);
+            $api.css($api.byId('ckd_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_ckd'), '否');
+            $api.css($api.byId('is_ckd'), 'color:black');
+            $api.css($api.byId('ckd_show'), 'display:none');
+        }
+
+        //判断冠心病
+        if (ret.result.guanxb.is_guanxb == 1) {
+            $api.text($api.byId('is_gxb'), '是');
+            $api.css($api.byId('is_gxb'), 'color:red');
+            if (ret.result.guanxb.is_xinjgs == 1) {
+                $api.text($api.byId('is_xjgs'), '是');
+                $api.css($api.byId('is_xjgs'), 'color:red');
+            } else {
+                $api.text($api.byId('is_xjgs'), '否');
+                $api.css($api.byId('is_xjgs'), 'color:balck');
+
+            }
+            if (ret.result.guanxb.is_zhirzj == 1) {
+                $api.text($api.byId('is_zj'), '是');
+                $api.css($api.byId('is_zj'), 'color:red');
+            } else {
+                $api.text($api.byId('is_zj'), '否');
+                $api.css($api.byId('is_zj'), 'color:black');
+
+            }
+            if (ret.result.guanxb.is_cabg == 1) {
+                $api.text($api.byId('is_cabg'), '是');
+                $api.css($api.byId('is_cabg'), 'color:red');
+            } else {
+                $api.text($api.byId('is_cabg'), '否');
+                $api.css($api.byId('is_cabg'), 'color:black');
+
+            }
+            $api.css($api.byId('gxb_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_gxb'), '否');
+            $api.css($api.byId('is_gxb'), 'color:black');
+            $api.css($api.byId('gxb_show'), 'display:none');
+        }
+
+        //判断低HDL_C
+        if (ret.result.hdl_c.is_low == 1) {
+            $api.text($api.byId('is_lowhdlc'), '是');
+            $api.css($api.byId('is_lowhdlc'), 'color:red');
+        } else {
+            $api.text($api.byId('is_lowhdlc'), '否');
+            $api.css($api.byId('is_lowhdlc'), 'color:black');
+
+        }
+
+        //判断脑卒中
+        if (ret.result.stroke.is_stroke == 1) {
+            $api.text($api.byId('is_ncz'), '是');
+            $api.css($api.byId('is_ncz'), 'color:red');
+            $api.text($api.byId('ncz_type'), ret.result.stroke.type);
+            $api.css($api.byId('ncz_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_ncz'), '否');
+            $api.css($api.byId('is_ncz'), 'color:black');
+            $api.css($api.byId('ncz_show'), 'display:none');
+        }
+
+        //判断心力衰竭
+        if (ret.result.xinlsj.is_xinlsj == 1) {
+            $api.text($api.byId('is_xlsj'), '是');
+            $api.css($api.byId('is_xlsj'), 'color:red');
+            $api.text($api.byId('ef_value'), ret.result.xinlsj.ef_value);
+            $api.css($api.byId('xlsj_show'), 'display:inline-block');
+
+        } else {
+            $api.text($api.byId('is_xlsj'), '否');
+            $api.css($api.byId('is_xlsj'), 'color:black');
+            $api.css($api.byId('xlsj_show'), 'display:none');
+        }
+
+        //判断TIA
+        if (ret.result.tia.is_tia == 1) {
+            $api.text($api.byId('is_tia'), '是');
+            $api.css($api.byId('is_tia'), 'color:red');
+        } else {
+            $api.text($api.byId('is_tia'), '否');
+            $api.css($api.byId('is_tia'), 'color:black');
+
+        }
+
+        //判断早发冠心病家族史
+        if (ret.result.zaofgxb.is_zaofgxb_history == 1) {
+            $api.text($api.byId('is_zfgxb'), '是');
+            $api.css($api.byId('is_zfgxb'), 'color:red');
+        } else {
+            $api.text($api.byId('is_zfgxb'), '否');
+            $api.css($api.byId('is_zfgxb'), 'color:black');
+
+        }
+
+        //判断早发冠心病家族史
+        if (ret.result.zaofgxb.is_zaofgxb_history == 1) {
+            $api.text($api.byId('is_zfgxb'), '是');
+            $api.css($api.byId('is_zfgxb'), 'color:red');
+        } else {
+            $api.text($api.byId('is_zfgxb'), '否');
+            $api.css($api.byId('is_zfgxb'), 'color:black');
+
+        }
+
+        //判断高血压病家族史
+        if (ret.result.gaoxyb.is_gaoxyb_history == 1) {
+            $api.text($api.byId('is_gxyb'), '是');
+            $api.css($api.byId('is_gxyb'), 'color:red');
+        } else {
+            $api.text($api.byId('is_gxyb'), '否');
+            $api.css($api.byId('is_gxyb'), 'color:black');
+
+        }
+
+        //判断尿蛋白
+        if (ret.result.niaodb.is_niaodb == 1) {
+            $api.text($api.byId('is_ndb'), '是');
+            $api.css($api.byId('is_ndb'), 'color:red');
+        } else {
+            $api.text($api.byId('is_ndb'), '否');
+            $api.css($api.byId('is_ndb'), 'color:black');
+
+        }
+
+        //判断外周动脉疾病
+        if (ret.result.waizdm.is_waizdm == 1) {
+            $api.text($api.byId('is_wzdm'), '是');
+            $api.css($api.byId('is_wzdm'), 'color:red');
+        } else {
+            $api.text($api.byId('is_wzdm'), '否');
+            $api.css($api.byId('is_wzdm'), 'color:black');
+
+        }
+
+    }
+
+    function editHis(pro) {
+        if (personalInfo == undefined) {
+            alert("您还未登录！请先登录~")
+        } else {
+
+            if (pro == 'gxy') {
+                var is_gxy = $api.text($api.byId("is_gxy"));
+                if(is_gxy == "是"){
+                  var is_gxy_id = 1;
+                }else{
+                  var is_gxy_id = 0;
+                }
+                var gxy_year = $api.text($api.byId("gxy_year"));
+                var gxy_high = $api.text($api.byId("gxy_high"));
+                var gxy_low = $api.text($api.byId("gxy_low"));
+
+                api.openFrame({
+                    name: 'res_gxy',
+                    url: './result/res_gxy.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        is_gxy_id: is_gxy_id,
+                        gxy_year:gxy_year,
+                        gxy_high:gxy_high,
+                        gxy_low:gxy_low
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'gms') {
+              var is_gms = $api.text($api.byId("is_gms"));
+              if(is_gms == "是"){
+                var is_gms_id = 1;
+              }else{
+                var is_gms_id = 0;
+              }
+              var guomy = $api.text($api.byId("guomy"));
+
+                api.openFrame({
+                    name: 'res_gms',
+                    url: './result/res_gms.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        is_gms_id: is_gms_id,
+                        guomy:guomy
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'tnb') {
+              var is_tnb = $api.text($api.byId("is_tnb"));
+              if(is_tnb == "是"){
+                var is_tnb_id = 1;
+              }else{
+                var is_tnb_id = 0;
+              }
+              var year = $api.text($api.byId("tnb_year"));
+
+                api.openFrame({
+                    name: 'res_tnb',
+                    url: './result/res_tnb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        is_tnb_id: is_tnb_id,
+                        year:year
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'tz') {
+                var body_weight = $api.text($api.byId("body_tz"));
+                var body_height = $api.text($api.byId("body_sg"));
+                var body_bmi = $api.text($api.byId("body_bmi"));
+                api.openFrame({
+                    name: 'res_tz',
+                    url: './result/res_tz.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        body_weight: body_weight,
+                        body_height:body_height,
+                        bmi:body_bmi
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'gxzz') {
+                api.openFrame({
+                    name: 'res_gxzz',
+                    url: './result/res_gxzz.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'fc') {
+                api.openFrame({
+                    name: 'res_fc',
+                    url: './result/res_fc.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xy') {
+                api.openFrame({
+                    name: 'res_xy',
+                    url: './result/res_xy.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'ckd') {
+                api.openFrame({
+                    name: 'res_ckd',
+                    url: './result/res_ckd.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'gxb') {
+                api.openFrame({
+                    name: 'res_gnb',
+                    url: './result/res_gnb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'hdlc') {
+                api.openFrame({
+                    name: 'res_hdls',
+                    url: './result/res_hdlc.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'nzz') {
+                api.openFrame({
+                    name: 'res_nzz',
+                    url: './result/res_nzz.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'xlsj') {
+                api.openFrame({
+                    name: 'res_xlsj',
+                    url: './result/res_xlsj.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'tia') {
+                api.openFrame({
+                    name: 'res_tia',
+                    url: './result/res_tia.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'zfgxb') {
+                api.openFrame({
+                    name: 'res_zfgxb',
+                    url: './result/res_zfgxb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'gxyb') {
+                api.openFrame({
+                    name: 'res_gxyb',
+                    url: './result/res_gxyb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'ndb') {
+                api.openFrame({
+                    name: 'res_ndb',
+                    url: './result/res_ndb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'wzdm') {
+                api.openFrame({
+                    name: 'res_wzdm',
+                    url: './result/res_wzdm.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'others') {
+              var other = $api.text($api.byId('others'));
+                api.openFrame({
+                    name: 'res_others',
+                    url: './result/res_others.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        other: other
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'aspl') {
+                api.openFrame({
+                    name: 'res_aspl',
+                    url: './result/res_aspl.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'ascvd') {
+                api.openFrame({
+                    name: 'res_ascvd',
+                    url: './result/res_ascvd.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'esseb') {
+                api.openFrame({
+                    name: 'res_esseb',
+                    url: './result/res_esseb.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            } else if (pro == 'chads') {
+                api.openFrame({
+                    name: 'res_chads',
+                    url: './result/res_chads.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        name: 'test'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                    vScrollBarEnabled: false,
+                    hScrollBarEnabled: false
+                });
+            }
+        }
+    }
+</script>
+
+</html>

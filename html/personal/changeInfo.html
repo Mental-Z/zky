@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html onclick="closeFra()">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style>
+        html,
+        body {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .title{background-color: #00B096;position: relative;height:50px;}
+        .form{background-color: #fff;margin-top: 20%;
+          /*position: fixed;width: 100%;*/
+        }
+        .close{position: absolute;color: #fff;left:0px;bottom: 0px;text-align: center;width:50px;line-height:50px;font-size: 16px;}
+        .save{position: absolute;color: #fff;right:0px;bottom:0px;text-align: center;width:50px;line-height: 50px;font-size: 14px;}
+        h2{text-align: center;left:auto;color: #fff;line-height: 50px;font-size: 18px;}
+        .content{padding-left: 15px;padding-right: 15px;}
+        .content h3{height:30px;color: gray;margin-top: 5px; font-size: .9rem}
+        .content input{height:30px;width: 100%;margin-bottom: 5px;border-bottom:1px solid #f2f2f2;padding-left: 10px;}
+        .content input:focus{outline-offset: 0;border-bottom:1px solid #00B096;outline: none;padding-left:10px}
+    </style>
+</head>
+
+<body>
+    <div class="form" onclick="stopEvent()">
+        <div class="title">
+            <span class="close" onclick="closeFra()">X</span>
+            <h2>个人信息</h2>
+            <span class="save" onclick="saveEdit()">保存</span>
+        </div>
+        <div class="content">
+            <h3>家庭住址</h3>
+            <input type="text" name="home_addr" id="home_addr" value="" disabled>
+            <h3>联系电话</h3>
+            <input type="text" name="phone" id="phone" value="" disabled>
+            <h3>紧急联系人姓名</h3>
+            <input type="text" name="jinji_name" id="jinji_name" value="" disabled>
+            <h3>紧急联系人电话</h3>
+            <input type="text" name="jinji_phone" id="jinji_phone" value="" disabled>
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        personalInfo = $api.getStorage('personalInfo');
+
+
+        var info = api.pageParam.str;
+        var home_addr = api.pageParam.home_addr;
+        var phone = api.pageParam.phone;
+        var jinji_name = api.pageParam.jinji_name;
+        var jinji_phone = api.pageParam.jinji_phone;
+        $api.removeAttr($api.byId(info), 'disabled');
+        $api.val($api.byId("home_addr"), home_addr);
+        $api.val($api.byId("phone"), phone);
+        $api.val($api.byId("jinji_name"), jinji_name);
+        $api.val($api.byId("jinji_phone"), jinji_phone);
+
+    };
+
+    function closeFra() {
+        api.closeFrame();
+    }
+
+    function stopEvent() {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    function saveEdit() {
+      var home_addr =  $api.val($api.byId("home_addr"));
+      var phone = $api.val($api.byId("phone"));
+      var jinji_name = $api.val($api.byId("jinji_name"));
+      var jinji_phone = $api.val($api.byId("jinji_phone"));
+      var token = personalInfo.result.token;
+      api.ajax({
+          url: 'http://api.zkhealth.com.cn/phone_patient/edit/patient_info/basic',
+          method: 'post',
+          headers:{
+            'Authorization':token
+          },
+          data: {
+              values: {
+                  home_addr: home_addr,
+                  phone:phone,
+                  jinji_name:jinji_name,
+                  jinji_phone:jinji_phone
+              }
+          }
+      },function(ret, err){
+          if (ret) {
+              var str = 'Update()';
+              api.execScript({
+                  // name: 'winName',
+                  frameName: 'perinfo_fra',
+                  script: str
+              });
+
+          } else {
+              alert( JSON.stringify( err.statusCode ) );
+          }
+      });
+
+
+    }
+</script>
+
+</html>

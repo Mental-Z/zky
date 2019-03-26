@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html onclick="closeEdit()">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style>
+        html,
+        body {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            background-color: #00B096;
+            position: relative;
+            height: 50px;
+        }
+
+        .form {
+            background-color: #fff;
+            margin-top: 22%;
+        }
+
+        .close{position: absolute;color: #fff;left:0px;bottom: 0px;text-align: center;width:50px;line-height:50px;font-size: 16px;}
+        .save{position: absolute;color: #fff;right:0px;bottom:0px;text-align: center;width:50px;line-height: 50px;font-size: 14px;}
+        h2{text-align: center;left:auto;color: #fff;line-height: 50px;font-size: 18px;}
+        .content h3{height:30px;color: gray;margin-top: 10px;font-size: .9rem;}
+        .content{padding-left: 15px;padding-right: 15px;}
+
+        .content input{height:30px;width: 100%;margin-top: 10px;margin-bottom: 10px;border-bottom:1px solid #f2f2f2;padding-left: 10px;}
+        .content input:focus{outline-offset: 0;border-bottom:1px solid #00B096;outline: none;padding-left:10px}
+
+        .is_meal {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .meal {
+            border: 1px solid;
+            border-radius: 15px;
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin-left: 20px;
+        }
+
+        .meal.check {
+            border: 1px solid #00b096;
+            color: #00B096;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form" onclick="stopEvent()">
+        <div class="title">
+            <span class="close" onclick="closeEdit()">X</span>
+            <h2>血糖</h2>
+            <span class="save" onclick="saveEdit()">保存</span>
+        </div>
+        <div class="content">
+            <!-- <h3>收缩压(mmHg)</h3> -->
+
+            <div class="is_meal">
+                <span class="meal" id="cq" onclick="change( this )">餐前</span>
+                <span class="meal" id="ch" onclick="change( this )">餐后</span>
+                <input type="hidden" name="meal_id" id="meal_id" value="">
+            </div>
+
+            <h3>血糖值</h3>
+            <input type="text" name="xt_value" id="xt_value" value="">
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+
+<script type="text/javascript">
+    apiready = function() {
+        personalInfo = $api.getStorage('personalInfo');
+
+        var xt_value = api.pageParam.xt_value;
+        var is_meal = api.pageParam.is_meal;
+        $api.val($api.byId("xt_value"), xt_value);
+        // $api.val($api.byId("xy_low"), xy_low);
+        if (is_meal == 1) {
+          $api.addCls($api.byId("cq"), 'check');
+          $api.val($api.byId("meal_id"), '1');
+
+        }else{
+          $api.addCls($api.byId("ch"), 'check');
+          $api.val($api.byId("meal_id"), '0');
+
+        }
+
+    };
+
+    function closeEdit() {
+        api.closeFrame();
+
+    }
+
+    function stopEvent() {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    function change(tag) {
+        if(tag == $api.dom('#cq') ){
+          $api.addCls($api.byId("cq"), 'check');
+          $api.removeCls($api.byId("ch"), 'check');
+          $api.val($api.byId("meal_id"), '1');
+
+        }else {
+          $api.addCls($api.byId("ch"), 'check');
+          $api.removeCls($api.byId("cq"), 'check');
+          $api.val($api.byId("meal_id"), '0');
+
+        }
+    }
+
+    function saveEdit() {
+        var xt_value = $api.val($api.byId("xt_value"));
+
+        var ids = $api.val($api.byId('meal_id'));
+
+        var token = personalInfo.result.token;
+        api.ajax({
+            url: 'http://api.zkhealth.com.cn/phone_patient/new/patient_detail/BloodSugar',
+            method: 'post',
+            headers: {
+                'Authorization': token,
+                // 'Content-Type': 'application/json;charset=utf-8'
+            },
+            data: {
+                values: {
+                    value: xt_value,
+                    is_before_meal: ids
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // alert("成功");
+                var jsFun = 'updateXt()';
+                api.execScript({
+
+                    frameName: 'frame0',
+                    script: jsFun
+                });
+                closeEdit();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+</script>
+
+</html>

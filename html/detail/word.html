@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+  <html onclick="closeRes()">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+      <style>
+          html,body{background-color: rgba(0, 0, 0, 0.1);}
+          .form {
+              background-color: #fff;
+              margin-top: 22%;
+          }
+          .title {
+              /*background-color: #00B096;*/
+              position: relative;
+              height: 50px;
+              border-bottom: 1px solid #f1f1f1;
+          }
+          h2 {
+              text-align: center;
+              left: auto;
+              color: #000;
+              line-height: 50px;
+              font-weight: 500;
+              font-size: 20px;
+          }
+          .content {
+            margin: 10px 0;
+              padding-left: 15px;
+              padding-right: 15px;
+              text-align: center;
+              min-height: 150px;;
+          }
+          /*.content>div>span{margin-left: 15px;}*/
+          .content>div{margin-top:10px;}
+
+      </style>
+  </head>
+  <body>
+    <div class="form" onclick="stopEvent()">
+        <div class="title">
+            <!-- <span class="close" onclick="closeEdit()">X</span> -->
+            <h2 id="title">说明</h2>
+            <!-- <span class="save" onclick="saveEdit()">保存</span> -->
+        </div>
+        <div class="content">
+            <div class="" id="content">
+
+            </div>
+        </div>
+
+    </div>
+  </body>
+  <script type="text/javascript" src="../../script/api.js"></script>
+  <script type="text/javascript">
+  apiready = function() {
+      personalInfo = $api.getStorage('personalInfo');
+      var str = api.pageParam.str;
+
+      $api.text($api.byId("content"), str);
+
+
+
+
+  }
+
+  function closeRes() {
+      api.closeFrame();
+  }
+
+  function stopEvent() {
+      event.preventDefault();
+      event.stopPropagation();
+  }
+
+  </script>
+  </html>

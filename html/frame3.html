@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>医患交流</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/aui.css">
+    <style>
+        /*.aui-list {
+            margin-top: 25px;
+        }*/
+
+        .details {
+            color: gray;
+            margin-left: 24px;
+            font-size: 18px;
+        }
+
+        .detail-div {
+            margin-top: 20px;
+        }
+
+        .date_ {
+            color: gray;
+            font-size: 14px;
+        }
+        .aui-list .aui-list-item-right#doc_info{
+          max-width: 70%;
+        }
+        .doc_info{font-size: 0.6rem;color:#757575;}
+        #login_div{text-align: center;margin: 20%;}
+    </style>
+</head>
+
+<body>
+    <div class="aui-card-list">
+
+        <div class="aui-card-list-content">
+            <ul class="aui-list aui-media-list" id="chat_list">
+              <!-- <li class="aui-list-item aui-list-item-middle">
+                  <div class="aui-media-list-item-inner">
+                      <div class="aui-list-item-media" style="width: 3rem;">
+                          <img src="../image/demo5.png" class="aui-img-round" >
+                      </div>
+                      <div class="aui-list-item-inner aui-list-item-arrow">
+                          <div class="aui-list-item-text">
+                              <div class="aui-list-item-title aui-font-size-14">AUI</div>
+                              <div class="aui-list-item-right">08:00</div>
+                          </div>
+                          <div class="aui-list-item-text">
+                              www.auicss.com
+                          </div>
+                      </div>
+                  </div>
+              </li> -->
+            </ul>
+        </div>
+    </div>
+    <div class="login" id="login_div">
+
+    </div>
+    <!-- <div class="empty">开发</div> -->
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+
+        personalInfo = $api.getStorage('personalInfo');
+
+        if(personalInfo != undefined){
+
+          var token = personalInfo.result.token;
+          api.ajax({
+              url: 'http://api.zkhealth.com.cn/phone_patient/search/chat/list',
+              method: 'post',
+              headers: {
+                  'Authorization': token
+              },
+              data: {}
+          }, function(ret, err) {
+              if (ret ) {
+                  var html = '';
+                  for (var i = 0; i < ret.result.length; i++) {
+                    if(ret.result[i].last_message.id == null || ret.result[i].last_message.id == "" || ret.result[i].last_message.text == null || ret.result[i].last_message.text == ""){
+                      h = '<li class="aui-list-item aui-list-item-middle" tapmode onclick="openChatView(\''+ret.result[i].doctor.name+'\',\''+ret.result[i].id+'\')">' +
+                            '<div class="aui-media-list-item-inner">' +
+                              '<div class="aui-list-item-media" style="width: 3rem;">' +
+                                '<img src="http://pic.zkhealth.com.cn/'+ret.result[i].doctor.user_avatar_pictrue+'" class="aui-img-round">' +
+                              '</div>' +
+                              '<div class="aui-list-item-inner aui-list-item-arrow">' +
+                                '<div class="aui-list-item-text">' +
+                                  '<div class="aui-list-item-title aui-font-size-14">'+ret.result[i].doctor.name+
+                                  ' | <span class="hospital_name doc_info">'+ret.result[i].doctor.hospital_name+'</span>' +
+                                  '<span class="department_name doc_info">('+ret.result[i].doctor.department_name+')</span>' +
+
+                                  '</div>' +
+                                    // '<div class="aui-list-item-right" id="doc_info">' +
+                                    //   '<span class="hospital_name">'+ret.result[i].doctor.hospital_name+'</span>' +
+                                    //   '<span class="department_name">'+ret.result[i].doctor.department_name+'</span>' +
+                                    // '</div>' +
+                                  '</div>' +
+                                  '<div class="aui-list-item-text">' +
+                                    '<span class="content"></span>' +
+                                    '<span class="time"></span>' +
+                                  '</div>' +
+                                '</div>' +
+                              '</div>' +
+                            '</li>'
+                    }else{
+                      h = '<li class="aui-list-item aui-list-item-middle" tapmode onclick="openChatView(\''+ret.result[i].doctor.name+'\',\''+ret.result[i].id+'\')">' +
+                            '<div class="aui-media-list-item-inner">' +
+                              '<div class="aui-list-item-media" style="width: 3rem;">' +
+                                '<img src="http://pic.zkhealth.com.cn/'+ret.result[i].doctor.user_avatar_pictrue+'" class="aui-img-round">' +
+                              '</div>' +
+                              '<div class="aui-list-item-inner aui-list-item-arrow">' +
+                                '<div class="aui-list-item-text">' +
+                                  '<div class="aui-list-item-title aui-font-size-14">'+ret.result[i].doctor.name+
+                                  ' | <span class="hospital_name doc_info">'+ret.result[i].doctor.hospital_name+'</span>' +
+                                  '<span class="department_name doc_info">('+ret.result[i].doctor.department_name+')</span>' +
+
+                                  '</div>' +
+                                    // '<div class="aui-list-item-right" id="doc_info">' +
+                                    //   '<span class="hospital_name">'+ret.result[i].doctor.hospital_name+'</span>' +
+                                    //   '<span class="department_name">'+ret.result[i].doctor.department_name+'</span>' +
+                                    // '</div>' +
+                                  '</div>' +
+                                  '<div class="aui-list-item-text">' +
+                                    '<span class="content">'+ret.result[i].last_message.text.substring(0, 8)+'...</span>' +
+                                    '<span class="time">'+ret.result[i].last_message.time+'</span>' +
+                                  '</div>' +
+                                '</div>' +
+                              '</div>' +
+                            '</li>'
+                    }
+
+                      html = html + h;
+                  }
+
+                  $api.byId('chat_list').innerHTML = html;
+
+                  $api.css($api.byId('login_div'),"display:none");
+
+              } else {
+                  alert(JSON.stringify(err));
+              }
+          });
+
+        }else{
+
+          $api.byId('login_div').innerHTML = "请先登录";
+        }
+
+    }
+
+    function openChatView( doc_name , chat_id) {
+
+
+        api.openWin({
+            name: 'chat_win',
+            url: './chat/chat_win.html',
+            pageParam: {
+                doc_name: doc_name,
+                chat_id: chat_id
+            }
+        });
+
+    }
+</script>
+
+</html>

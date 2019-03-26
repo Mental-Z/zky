@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+      <link rel="stylesheet" href="../../css/aui.css">
+      <style>
+          body{
+
+          }
+          #topinfo{margin-top:20px; }
+          #logout{width:80%;margin: 50px auto;}
+      </style>
+  </head>
+  <body>
+    <div class="aui-card-list" id="topinfo">
+        <div class="aui-card-list-content">
+            <ul class="aui-list aui-media-list">
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 4rem;">
+                            <img src="" class="aui-img-round" id="picture">
+                        </div>
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-18" id="name"></div>
+                                
+                            </div>
+                            <div class="aui-list-item-text">
+                                <span id="s_a"><span id="sex"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="age"></span>岁</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-header"></li>
+        <li class="aui-list-item" tapmode onclick="changePwd()">
+            <div class="aui-list-item-label-icon">
+                <!-- <i class="aui-iconfont aui-icon-home"></i> -->
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                修改密码
+            </div>
+        </li>
+    </ul>
+
+    <div class="aui-btn aui-btn-block aui-btn-danger" id="logout" tapmode onclick="logout()">退出登录</div>
+
+  </body>
+  <script type="text/javascript" src="../../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+        personalInfo = $api.getStorage('personalInfo');
+        personalInfoTop = $api.getStorage('personalInfoTop'); //顶部信息
+
+        $api.text($api.byId('name'), personalInfo.result.name);
+        $api.attr($api.byId("picture"), "src", "http://pic.zkhealth.com.cn/"+personalInfo.result.picture);
+        $api.text($api.byId("age"), personalInfoTop.result.age);
+        $api.text($api.byId("sex"), personalInfoTop.result.sex);
+      };
+
+      function changePwd() {
+        api.openFrame({
+            name: 'changePwd',
+            url: './changePwd.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: "auto",
+                h: "auto"
+            },
+            pageParam: {
+                name: 'test'
+            },
+            bounces: false,
+            bgColor: 'rgba(0,0,0,0.1)',
+            vScrollBarEnabled: false,
+            hScrollBarEnabled: false
+        });
+
+      }
+
+      function logout() {
+        api.confirm({
+            title: '退出登录',
+            msg: '是否确定退出？',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if( ret ){
+              if (ret.buttonIndex == 1) {
+
+                  $api.clearStorage();
+
+                  api.openWin({
+                      name: 'login',
+                      url: '../login.html',
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
+              }
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
+      }
+  </script>
+  </html>

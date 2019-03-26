@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/aui.css">
+    <style>
+        div.aui-card-list {
+            /*padding: 10px;*/
+        }
+
+        ul.aui-list {
+            margin-top: 20px;
+        }
+        .aui-list-item-label-icon img{width:50px;}
+        .aui-list-in .aui-list-item {
+            padding-left: 20px!important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="aui-card-list">
+        <div class="aui-card-list-content">
+            <ul class="aui-list aui-media-list">
+                <li class="aui-list-item aui-list-item-middle">
+                    <div class="aui-media-list-item-inner">
+                        <div class="aui-list-item-media" style="width: 4rem;">
+                            <img src="" class="aui-img-round" id="picture">
+                        </div>
+                        <div class="aui-list-item-inner aui-list-item-arrow">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-18" id="name"></div>
+                                <span id="login"></span>
+                            </div>
+                            <div class="aui-list-item-text">
+                                <span id="s_a"><span id="sex"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="age"></span>岁</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-header"></li>
+        <li class="aui-list-item" tapmode onclick="openPerInfo()">
+            <div class="aui-list-item-label-icon">
+                <!-- <i class="aui-iconfont aui-icon-home"></i> -->
+                <img src="../image/per_info.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                信息资料
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="openCard()">
+            <div class="aui-list-item-label-icon">
+                <!-- <i class="aui-iconfont aui-icon-edit"></i> -->
+                <img src="../image/card.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                就诊卡绑定
+            </div>
+        </li>
+    </ul>
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-header"></li>
+        <li class="aui-list-item" tapmode onclick="openSetting()">
+            <div class="aui-list-item-label-icon">
+                <!-- <i class="aui-iconfont aui-icon-home"></i> -->
+                <img src="../image/per_setting.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                账号管理
+            </div>
+        </li>
+        <li class="aui-list-item" tapmode onclick="openFeedback()">
+            <div class="aui-list-item-label-icon">
+                <!-- <i class="aui-iconfont aui-icon-edit"></i> -->
+                <img src="../image/feedback.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                意见反馈
+            </div>
+        </li>
+    </ul>
+    <!-- <div class="empty">文档</div> -->
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        personalInfo = $api.getStorage('personalInfo');
+        personalInfoTop = $api.getStorage('personalInfoTop'); //顶部信息
+        // personalInfoBasic = $api.getStorage('personalInfoBasic');
+
+        if (personalInfo != undefined) {
+            $api.text($api.byId('name'), personalInfo.result.name);
+            $api.attr($api.byId("picture"), "src", "http://pic.zkhealth.com.cn/"+personalInfo.result.picture);
+            if(personalInfoTop != undefined  && personalInfoTop.length>0){
+
+              $api.text($api.byId("age"), personalInfoTop.result.age);
+              $api.text($api.byId("sex"), personalInfoTop.result.sex);
+
+              var token = personalInfo.result.token;
+
+              api.ajax({
+                  url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_info/basic',
+                  method: 'post',
+                  headers: {
+                      'Authorization': token
+                  },
+                  data: {}
+              }, function(ret, err) {
+                  $api.setStorage('personalInfoTop', ret);
+
+                  $api.text($api.byId("age"), ret.result.age);
+                  $api.text($api.byId("sex"), ret.result.sex);
+                  $api.css($api.byId("s_a"),"display:inline-block")
+
+              });
+            }else{
+              var token = personalInfo.result.token;
+
+              api.ajax({
+                  url: 'http://api.zkhealth.com.cn/phone_patient/search/patient_info/basic',
+                  method: 'post',
+                  headers: {
+                      'Authorization': token
+                  },
+                  data: {}
+              }, function(ret, err) {
+                  $api.setStorage('personalInfoTop', ret);
+
+                  $api.text($api.byId("age"), ret.result.age);
+                  $api.text($api.byId("sex"), ret.result.sex);
+                  $api.css($api.byId("s_a"),"display:inline-block");
+
+              });
+            }
+        } else {
+            $api.text($api.byId('name'), "未登录");
+            $api.attr($api.byId("picture"), "src", "../image/no_user.png");
+            $api.html($api.byId("login"), '<p class="aui-btn aui-btn-success" tapmode onclick="Login()">点击登录</p>');
+            $api.css($api.byId("s_a"),"display:none");
+
+        }
+
+    }
+
+    function Login() {
+        if (personalInfo == undefined) {
+            api.openWin({
+                name: 'login',
+                url: './login.html',
+                pageParam: {
+                    name: 'test'
+                }
+            });
+        } else {
+            return;
+        }
+    }
+
+    function openPerInfo() {
+
+      if(personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else {
+        var header_height = api.pageParam.header_height;
+        var main_height = api.pageParam.main_height;
+
+        api.openWin({
+            name: 'perinfo',
+            url: './personal/perinfo_win.html',
+            pageParam: {
+                main_height: main_height,
+                header_height: header_height
+            }
+        });
+      }
+
+
+    }
+
+    function openCard() {
+
+      if(personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else {
+        var header_height = api.pageParam.header_height;
+        var main_height = api.pageParam.main_height;
+
+        api.openWin({
+            name: 'card',
+            url: './personal/card_win.html',
+            pageParam: {
+                main_height: main_height,
+                header_height: header_height
+            }
+        });
+      }
+
+    }
+
+    function openSetting() {
+
+      if(personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else {
+        var header_height = api.pageParam.header_height;
+        var main_height = api.pageParam.main_height;
+
+        api.openWin({
+            name: 'account',
+            url: './personal/account_win.html',
+            pageParam: {
+              main_height: main_height,
+              header_height: header_height
+            }
+        });
+      }
+    }
+
+    function openFeedback() {
+      if(personalInfo == undefined){
+        alert("您还未登录！请先登录~")
+      }else {
+        alert("暂未开发！")
+      }
+    }
+</script>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+  <html onclick="closeEdit()">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+      <style>
+      html,body{background-color: rgba(0, 0, 0, 0.1);}
+      .form {
+          background-color: #fff;
+          margin-top: 20%;
+      }
+      .title {
+          /*background-color: #00B096;*/
+          position: relative;
+          height: 50px;
+          border-bottom: 1px solid #f1f1f1;
+      }
+      h2 {
+          text-align: center;
+          left: auto;
+          color: #000;
+          line-height: 50px;
+          font-weight: 500;
+          font-size: 20px;
+      }
+      .content h3{height:30px;color: gray;margin-top: 10px;font-size: .9rem;}
+      .close{position: absolute;color: #000;left:0px;bottom: 0px;text-align: center;width:50px;line-height:50px;font-size: 16px;}
+      .content{padding-left: 15px;padding-right: 15px;}
+      #content img{width: 100%;height: auto}
+      #show_img{width: auto;height: auto;z-index: 1000;position: absolute ;top:0;}
+      .show_img{display: none;}
+      #show_img #bimg{width: auto;height: auto;}
+      </style>
+  </head>
+  <body>
+  <div class="form" onclick="stopEvent()">
+    <div class="title">
+      <span class="close" onclick="closeEdit()">X</span>
+      <h2>心电图</h2>
+      <!-- <span class="save" onclick="saveEdit()">保存</span> -->
+    </div>
+    <div class="content" id="content">
+
+    </div>
+    <!-- <div class="show_img" id="show_img">
+      <img id="bimg" src="" alt="">
+    </div> -->
+  </div>
+  </body>
+  <script type="text/javascript" src="../../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        personalInfo = $api.getStorage('personalInfo');
+        patientDetails = $api.getStorage('patientDetails');
+        // console.log(JSON.stringify(patientDetails));
+
+        if(patientDetails.result.Electrocardiogram != null || patientDetails.result.Electrocardiogram.length > 0){
+          // console.log(1);
+          var html='';
+          for(var i=0;i<patientDetails.result.Electrocardiogram.length;i++){
+            h = '<span>'+patientDetails.result.Electrocardiogram[i].time+'</span>'+
+                '<img src="'+patientDetails.result.Electrocardiogram[i].pic_url+'" onclick="lkimg(this)" />'
+            html = html + h;
+            // console.log(i);
+          }
+          $api.byId('content').innerHTML = html;
+        }
+
+      };
+      function closeEdit() {
+        api.closeFrame();
+
+      }
+      function stopEvent() {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      function lkimg(tag) {
+
+        // $api.removeCls($api.byId('show_img'), 'show_img');
+        //
+        // $api.attr($api.byId('bimg'), 'src', tag.src);
+
+      }
+  </script>
+  </html>
